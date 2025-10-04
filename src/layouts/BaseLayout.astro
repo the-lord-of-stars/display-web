@@ -56,5 +56,43 @@ const {
         ) !important;
       }
     </style>
+
+    <script src="https://unpkg.com/oh-my-live2d@latest" is:inline></script>
+    <script is:inline>
+      window.addEventListener("DOMContentLoaded", () => {
+        if (window.OML2D) {
+          OML2D.loadOml2d({
+            dockedPosition: 'right',
+            primaryColor: '#14b8a6',
+            models: [
+              {
+                path: "https://raw.githubusercontent.com/iCharlesZ/vscode-live2d-models/master/model-library/potion-Maker-Tia/index.json",
+                position: [-25, 0],
+                scale: 0.4,
+                stageStyle: {width: 300, height: 250}
+              }
+            ],
+            tips:
+                {
+                    style:
+                    {
+                       width: 230,
+                       height: 120,
+                       left: "calc(50% - 20px)",
+                       top: "-100px",
+                    },
+                  mobileStyle:
+                      {
+                        width: 115,
+                        height: 40,
+                        left: "calc(50 % -30px)",
+                        top: "-100px",
+                      }
+                }
+          });
+        }
+      });
+    </script>
+
   </body>
 </html>
