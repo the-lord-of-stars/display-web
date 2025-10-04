@@ -88,7 +88,31 @@ const {
                         left: "calc(50 % -30px)",
                         top: "-100px",
                       }
-                }
+                },
+          menus: {
+            mobileStyle: {
+              marginLeft: "110px",
+            },
+            style: {
+              marginLeft: "220px",
+            },
+            items: [
+              {
+                id: "Rest",
+                icon: "icon-rest",
+                title: "rest",
+                onClick: (oml2d) => {
+                  oml2d.stageSlideOut();
+                  oml2d.setStatusBarClickEvent(() => {
+                    oml2d.stageSlideIn();
+                    oml2d.statusBarClose("Success");
+                  });
+                  oml2d.statusBarOpen("Resting");
+                },
+              },
+            ],
+          },
+
           });
         }
       });
