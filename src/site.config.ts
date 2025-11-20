@@ -5,7 +5,7 @@ export const theme: ThemeUserConfig = {
   /** Title for your website. Will be used in metadata and as browser tab title. */
   title: 'qSTARp',
   /** Will be used in index page & copyright declaration */
-  author: 'qSTARp',
+  author: 'Zefei Xie',
   /** Description metadata for your website. Can be used in page metadata. */
   description: 'Bot-tash bir jab-loo di rekh kkhakkh-ony',
   /** The default favicon for your site which should be a path to an image in the `public/` directory. */
