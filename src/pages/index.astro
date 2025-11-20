@@ -14,7 +14,9 @@ import config from '@/site-config'
 
 const languages = ['Python','Java','Haskell','C','Assembly Language']
 const frontend = ['TypeScript', 'Tailwind', 'React',]
-const backend = ['Vercel', 'Waline', 'Hexo', 'Quarto', 'Flask', 'Gradio', 'FastAPI']
+const backend = ['SQL', 'Milvus', 'Chroma',]
+const libraries = ['LangChain', 'Scikit-learn', 'Numpy', 'NLTK', 'LangGraph']
+const framework = ['Vercel', 'Waline', 'Hexo', 'Quarto', 'Flask', 'Gradio', 'FastAPI']
 
 const MAX_POSTS = 10
 const allPosts = await getBlogCollection()
@@ -117,24 +119,24 @@ const allPostsByDate = sortMDByDate(allPosts).slice(0, MAX_POSTS)
         </Card>
       </Section>
 
-      <Section title='Website List'>
+      <Section title='Projects'>
         <div class='grid grid-cols-1 gap-3 sm:grid-cols-2'>
           <ProjectCard
-            href='https://www.youtube.com/watch?v=dQw4w9WgXcQ'
-            heading='Lorem ipsum'
-            subheading='dolor sit amet, oratio ornatus explicari pro ex'
+            href='https://vis4sense.github.io/agentic-vis-2025/'
+            heading='IEEE VIS 2025 GenxAI workshop challenge'
+            subheading='Using LangGraph to build a agent to generate visualization report'
             imagePath='/src/assets/projects/alex-tyson-2BAXJ7ha74s-unsplash.jpg'
           />
           <ProjectCard
-            href='https://www.youtube.com/watch?v=dQw4w9WgXcQ'
-            heading='Lorem ipsum'
-            subheading='dolor sit amet, oratio ornatus explicari pro ex'
+            href='https://the-lord-of-stars.github.io/Data-Analytics-and-AI-Curriculum-project/'
+            heading='Quarto Template'
+            subheading='A template designed for UNUK mathmetics department'
             imagePath='/src/assets/projects/angelica-teran-Bk9hpaXHK4o-unsplash.jpg'
           />
           <ProjectCard
-            href='https://www.youtube.com/watch?v=dQw4w9WgXcQ'
-            heading='Lorem ipsum'
-            subheading='dolor sit amet, oratio ornatus explicari pro ex'
+            href='https://github.com/the-lord-of-stars/team32-project'
+            heading='IBM Watsonx Assistant'
+            subheading='AI assistant for new students'
             imagePath='/src/assets/projects/kseniia-zapiatkina-yATU3rg8tNI-unsplash.jpg'
           />
           <ProjectCard
@@ -150,7 +152,9 @@ const allPostsByDate = sortMDByDate(allPosts).slice(0, MAX_POSTS)
       <Section title='Skills'>
         <SkillLayout title='Languages' skills={languages} />
         <SkillLayout title='Frontend' skills={frontend} />
-        <SkillLayout title='Framework' skills={backend} />
+        <SkillLayout title='Backend' skills={backend} />
+        <SkillLayout title='Libraries' skills={libraries} />
+        <SkillLayout title='Framework' skills={framework} />
       </Section>
     </div>
     <Quote class='mt-12' />
