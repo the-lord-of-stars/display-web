@@ -25,8 +25,8 @@ import config from './src/site.config.ts'
 // https://astro.build/config
 export default defineConfig({
   // Top-Level Options
-  site: 'https://astro-pure.js.org',
-  // base: '/docs',
+  site: 'https://the-lord-of-stars.github.io',
+  base: '/display-web',
   trailingSlash: 'never',
 
   // Adapter
