@@ -18,7 +18,7 @@ const backend = ['SQL', 'Milvus', 'Chroma',]
 const libraries = ['LangChain', 'Scikit-learn', 'Numpy', 'NLTK', 'LangGraph']
 const framework = ['Vercel', 'Waline', 'Hexo', 'Quarto', 'Flask', 'Gradio', 'FastAPI']
 
-const MAX_POSTS = 10
+const MAX_POSTS = 2
 const allPosts = await getBlogCollection()
 const allPostsByDate = sortMDByDate(allPosts).slice(0, MAX_POSTS)
 ---
@@ -47,6 +47,30 @@ const allPostsByDate = sortMDByDate(allPosts).slice(0, MAX_POSTS)
           >
             <Icon name='github' class='size-5' slot='icon' />
           </Label>
+          <Label
+              title='LinkedIn'
+              as='a'
+              href='https://www.linkedin.com/in/zefei-xie-023644339/'
+              target='_blank'
+          >
+            <Icon name='link' class='size-5' slot='icon' />
+          </Label>
+          <Label
+              title='Discord'
+              as='a'
+              href='https://discordapp.com/users/1288076012713807895'
+              target='_blank'
+          >
+            <Icon name='discord' class='size-5' slot='icon' />
+          </Label>
+          <Label
+              title='Email me'
+              as='a'
+              href='mailto:<1506894634@qq.com>'
+              target='_blank'
+          >
+            <Icon name='email' class='size-5' slot='icon' />
+          </Label>
         </div>
       </div>
     </section>
@@ -59,7 +83,6 @@ const allPostsByDate = sortMDByDate(allPosts).slice(0, MAX_POSTS)
 
           My research focuses on investigating ways AI can enhance <strong>data mapping and processing</strong>, with particular interest in <strong>AI agents</strong>. I'm especially interested in applying artificial intelligence to natural language processing, as well as making sense of complex data structures through <strong>data science and engineering</strong>.
 
-          Beyond technology, I enjoy all types of games (<strong> except Souls-like! </strong>) and I'm a fan of <strong>Isekai animation</strong>.
         </p>
         <Button title='More about me' class='w-fit self-end' href='/about' variant='ahead' />
       </Section>
@@ -69,7 +92,7 @@ const allPostsByDate = sortMDByDate(allPosts).slice(0, MAX_POSTS)
             <ul class='flex flex-col gap-y-1.5 sm:gap-y-2'>
               {allPostsByDate.map((p) => (
                 <li class='flex flex-col gap-x-2 sm:flex-row'>
-                  <PostPreview post={p} />
+                  <PostPreview post={p} detailed/>
                 </li>
               ))}
             </ul>
@@ -124,7 +147,7 @@ const allPostsByDate = sortMDByDate(allPosts).slice(0, MAX_POSTS)
           <ProjectCard
             href='https://vis4sense.github.io/agentic-vis-2025/'
             heading='IEEE VIS 2025 GenxAI workshop challenge'
-            subheading='Using LangGraph to build a agent to generate visualization report'
+            subheading='An agent to generate visualization report'
             imagePath='/src/assets/projects/alex-tyson-2BAXJ7ha74s-unsplash.jpg'
           />
           <ProjectCard
