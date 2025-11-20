@@ -26,7 +26,7 @@ import config from './src/site.config.ts'
 export default defineConfig({
   // Top-Level Options
   site: 'https://the-lord-of-stars.github.io',
-  base: '/display-web',
+  // base: '/display-web',
   trailingSlash: 'never',
 
   // Adapter
