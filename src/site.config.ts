@@ -62,8 +62,8 @@ export const theme: ThemeUserConfig = {
     links: [
       // Registration link
       {
-        title: 'Moe ICP 114514',
-        link: 'https://icp.gov.moe/?keyword=114514',
+        title: 'Moe ICP 20250836',
+        link: 'https://icp.gov.moe/?keyword=20250836',
         style: 'text-sm' // Uno/TW CSS class
       },
       {
