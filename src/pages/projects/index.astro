@@ -11,9 +11,8 @@ import KeyIcon from '@/assets/icons/key.svg'
 import wechat from '@/assets/wechat-qrcode.jpg'
 
 const headings = [
-  { depth: 2, slug: 'theme', text: 'Theme' },
   { depth: 2, slug: 'programs', text: 'Programs' },
-  { depth: 2, slug: 'learnings', text: 'Learnings' },
+  { depth: 2, slug: 'research', text: 'Researches' },
   { depth: 2, slug: 'others', text: 'Others' },
   { depth: 2, slug: 'sponsorship', text: 'Sponsorship' }
 ]
@@ -37,46 +36,22 @@ const headings = [
     <Icon class='size-5' name='receive-money' slot='before' />
   </Button>
 
-  <h2 id='theme'>Theme</h2>
-  <ProjectSection
-    projects={[
-      {
-        name: '🍭 Astro-theme-pure',
-        description: 'A simple, clean but powerful blog theme build by astro.',
-        links: [
-          { type: 'github', href: 'https://github.com/cworld1/astro-theme-pure' },
-          { type: 'site', href: 'https://github.com/cworld1/astro-theme-pure' },
-          {
-            type: 'doc',
-            href: 'https://github.com/cworld1/astro-theme-pure/blob/main/src/content/blog/customize/index.md'
-          }
-        ]
-      }
-    ]}
-  />
-
   <h2 id='programs'>Programs</h2>
   <ProjectSection
     projects={[
       {
-        name: '📒 Notie',
+        name: '📙 UNNCAllRounder',
         description:
-          'Android note App complies with Material You specifications, developed using Java',
+          'A UNNC ranking website',
         links: [
-          { type: 'github', href: 'https://github.com/cworld1/notie' },
-          {
-            type: 'release',
-            href: 'https://github.com/cworld1/notie/releases'
-          }
+          { type: 'github', href: 'https://github.com/the-lord-of-stars/UNNC-CampusAllRounder' },
         ]
       },
       {
-        name: '💄 PKU Art',
-        description: 'A script to beautify pku course website',
+        name: '🤖 Watsonx Assistant',
+        description: 'A student AI chatbot',
         links: [
-          { type: 'github', href: 'https://github.com/zhuozhiyongde/pku-art' },
-          { type: 'site', href: 'https://github.com/zhuozhiyongde/pku-art' },
-          { type: 'doc', href: 'https://docs.arthals.ink/docs/pku-art' }
+          { type: 'github', href: 'https://github.com/the-lord-of-stars/team32-project' },
         ]
       }
     ]}
@@ -85,38 +60,47 @@ const headings = [
     <ProjectSection
       projects={[
         {
-          name: 'Search Switcher',
-          description: 'Add links to each other in search engines',
-          links: [{ type: 'github', href: 'https://github.com/cworld1/search-switcher' }]
+          name: '🦆 Nock',
+          description: 'Live2d project',
+          links: [{ type: 'github', href: 'https://github.com/the-lord-of-stars/warehouse/tree/main/model/duck_model' }]
         },
         {
-          name: 'Pure Baidu',
-          description: 'Baidu search page beautification module',
+          name: '📑 DATA&AI Quarto Template',
+          description: 'Nottingham Quarto Template',
           links: [
-            { type: 'doc', href: 'https://cworld0.com/blog/pure-baidu' },
-            { type: 'site', href: 'https://userstyles.org/styles/173673/pure' }
+            { type: 'github', href: 'https://github.com/the-lord-of-stars/Data-Analytics-and-AI-Curriculum-project' },
+            { type: 'site', href: 'https://the-lord-of-stars.github.io/Data-Analytics-and-AI-Curriculum-project/'}
           ]
         }
       ]}
     />
   </Collapse>
 
-  <h2 id='learnings'>Learnings</h2>
+  <h2 id='research'>Researches</h2>
   <ProjectSection
     class='my-2'
     projects={[
       {
-        name: 'Rust Learning',
-        description: 'Some notes and code about CWorld learning Rust',
-        links: [{ type: 'github', href: 'https://github.com/cworld1/rust-learning' }]
-      },
-      {
-        name: 'CS 213 Learning',
-        description: 'Notes, code and experiences for Introduction to Computer Systems course',
+        name: '🤖 AwesomeLit',
+        description: 'Human AI collaboration on literature exploration',
         links: [
           {
             type: 'github',
-            href: 'https://github.com/zhuozhiyongde/Introduction-To-Computer-System-2023Fall-PKU'
+            href: 'https://github.com/Vis4Sense/student-projects/tree/main/2025-2026/Zefei%20Xie'
+          }
+        ]
+      },
+      {
+        name: '📈 Agentic Visualization',
+        description: 'IEEE VIS 2025 GenxAI workshop challenge',
+        links: [
+          {
+            type: 'github',
+            href: 'https://github.com/Vis4Sense/agentic-vis-2025'
+          },
+          {
+            type: 'site',
+            href: 'https://vis4sense.github.io/agentic-vis-2025/'
           }
         ]
       }
@@ -127,14 +111,17 @@ const headings = [
   <ProjectSection
     projects={[
       {
-        name: 'CWorld',
-        description: "CWorld's Github",
-        links: [{ type: 'github', href: 'https://github.com/cworld1' }]
+        name: 'warehouse',
+        description: "qSTARp's warehouse",
+        links: [{ type: 'github', href: 'https://github.com/the-lord-of-stars/warehouse' }]
       },
       {
-        name: 'Arthals',
-        description: 'Arthals Github',
-        links: [{ type: 'github', href: 'https://github.com/zhuozhiyongde' }]
+        name: 'Blog',
+        description: 'My old blog website',
+        links: [
+          { type: 'github', href: 'My old blog website' },
+          { type: 'site', href: 'https://the-lord-of-stars.github.io/' }
+        ]
       }
     ]}
   />
