@@ -65,6 +65,7 @@ const {
           OML2D.loadOml2d({
             dockedPosition: 'right',
             primaryColor: '#14b8a6',
+            mobileDisplay: true,
             models: [
               {
                 path: "/tia/model.json",
@@ -73,6 +74,16 @@ const {
                 stageStyle: {width: 300, height: 250}
               }
             ],
+            statusBar: {
+            mobileStyle: {
+              marginBottom: "100px",
+            },
+            style: {
+              marginBottom: "80px",
+            },
+            restMessage: "Resting",
+            loadSuccessMessage: "Ready",
+            },
             tips:
                 {
                     style:
