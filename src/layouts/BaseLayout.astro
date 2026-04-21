@@ -65,7 +65,7 @@ const {
           OML2D.loadOml2d({
             dockedPosition: 'right',
             primaryColor: '#14b8a6',
-            mobileDisplay: false,
+            initialStatus: 'sleep',
             models: [
               {
                 path: "/tia/model.json",
@@ -94,18 +94,11 @@ const {
                        left: "calc(50% - 20px)",
                        top: "-100px",
                     },
-                  // mobileStyle:
-                  //     {
-                  //       width: 115,
-                  //       height: 40,
-                  //       left: "calc(50% - 20px)",
-                  //       top: "-100px",
-                  //     }
                 },
           menus: {
-            // mobileStyle: {
-            //   marginLeft: "110px",
-            // },
+            mobileStyle: {
+               display: none,
+            },
             style: {
               marginLeft: "220px",
             },
