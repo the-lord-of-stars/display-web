@@ -1,7 +1,7 @@
 ---
 import PageLayout from '@/layouts/CommonPage.astro'
 import { Collapse } from 'astro-pure/user'
-import { publications, } from '@/pages/publications/data.astro'
+import { publications, } from './data.astro'
 
 const headings = publications.flatMap((group) => [
   {
@@ -89,7 +89,7 @@ const headings = publications.flatMap((group) => [
                           <a href={pub.bibtex} target='_blank' rel='noopener noreferrer'>BibTeX</a>
                         )}
                         {pub.online && (
-                          <a href={pub.bibtex} target='_blank' rel='noopener noreferrer'>Online</a>
+                          <a href={pub.online} target='_blank' rel='noopener noreferrer'>Online</a>
                         )}
                       </div>
                     </div>
@@ -282,3 +282,66 @@ const headings = publications.flatMap((group) => [
         }
     }
 </style>
+
+<script>
+  function setupPublicationScrollPercentFix() {
+    const actionBtns = document.getElementById('action-buttons')
+    const scrollBtn = document.getElementById('to-top-btn')
+    const articleElement = document.getElementById('main-content') || document.getElementById('content')
+
+    if (!actionBtns || !scrollBtn || !articleElement) return
+
+    const scrollPercentEl = scrollBtn.querySelector('.top-text .text')
+    if (!scrollPercentEl) return
+
+    function calculateScrollPercent() {
+      const articleRect = articleElement.getBoundingClientRect()
+      const articleTop = window.scrollY + articleRect.top
+      const scrollHeight = articleElement.scrollHeight
+      const clientHeight = window.innerHeight
+      const scrollTop = window.scrollY || document.documentElement.scrollTop
+
+      if (scrollTop < articleTop) return 0
+
+      const denominator = scrollHeight - clientHeight
+      if (denominator <= 0) return 100
+
+      const raw = Math.round(((scrollTop - articleTop) / denominator) * 100)
+      return Math.max(0, Math.min(raw, 100))
+    }
+
+    function updateScrollPercent() {
+      const percent = calculateScrollPercent()
+      scrollPercentEl.textContent = String(percent)
+      actionBtns.classList.toggle('ended', percent >= 100)
+    }
+
+    window.addEventListener('scroll', updateScrollPercent, { passive: true })
+    window.addEventListener('resize', updateScrollPercent)
+
+    document.querySelectorAll('img').forEach((img) => {
+      if (!img.complete) {
+        img.addEventListener('load', updateScrollPercent)
+      }
+    })
+
+    document.querySelectorAll('details').forEach((el) => {
+      el.addEventListener('toggle', () => {
+        requestAnimationFrame(updateScrollPercent)
+      })
+    })
+
+    const observer = new ResizeObserver(() => {
+      updateScrollPercent()
+    })
+    observer.observe(articleElement)
+
+    updateScrollPercent()
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', setupPublicationScrollPercentFix)
+  } else {
+    setupPublicationScrollPercentFix()
+  }
+</script>
