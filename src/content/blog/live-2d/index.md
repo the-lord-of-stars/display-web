@@ -13,10 +13,19 @@ language: 'English'
 <script src="https://unpkg.com/oh-my-live2d@latest"></script>
 <script>
   OML2D.loadOml2d({
+   mobileDisplay: true,
    models: [{
         path: 'https://raw.githubusercontent.com/the-lord-of-stars/warehouse/main/model/duck_model/duck.model3.json',
         position: [0, 0],
         scale:0.12,
+        mobileScale: 0.12,
+        mobileStageStyle:{
+            marginBottom: '10px',
+            marginLeft: '15px',
+            shadow: '0 0 10px rgba(0, 0, 0, 0.05)',
+            borderRadius: '20px',
+            backgroundColor: '#FFFFFF',
+        },
         stageStyle:{
             marginBottom: '10px',
             marginLeft: '15px',
@@ -30,11 +39,17 @@ language: 'English'
         loadSuccessMessage: 'Success'
    },
    tips: {
+        mobileStyle: {
+               display: 'none',
+        },
         style: {
                display: 'none',
                }
         },
    menus: {
+        mobileStyle: {
+               marginRight: '20px',
+        },
         style: {
                marginRight: '20px',
         },
