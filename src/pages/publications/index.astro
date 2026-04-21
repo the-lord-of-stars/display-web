@@ -285,14 +285,20 @@ const headings = publications.flatMap((group) => [
 
 <script>
   function setupPublicationScrollPercentFix() {
-    const actionBtns = document.getElementById('action-buttons')
-    const scrollBtn = document.getElementById('to-top-btn')
-    const articleElement = document.getElementById('main-content') || document.getElementById('content')
+    const actionBtnsEl = document.getElementById('action-buttons')
+    const scrollBtnEl = document.getElementById('to-top-btn')
+    const articleEl =
+      document.getElementById('main-content') || document.getElementById('content')
 
-    if (!actionBtns || !scrollBtn || !articleElement) return
+    if (!actionBtnsEl || !scrollBtnEl || !articleEl) return
 
-    const scrollPercentEl = scrollBtn.querySelector('.top-text .text')
-    if (!scrollPercentEl) return
+    const scrollPercentTextEl = scrollBtnEl.querySelector('.top-text .text')
+    if (!scrollPercentTextEl) return
+
+    const actionBtns = actionBtnsEl
+    const scrollBtn = scrollBtnEl
+    const articleElement = articleEl
+    const scrollPercentEl = scrollPercentTextEl
 
     function calculateScrollPercent() {
       const articleRect = articleElement.getBoundingClientRect()
