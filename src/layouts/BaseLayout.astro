@@ -65,7 +65,7 @@ const {
           OML2D.loadOml2d({
             dockedPosition: 'right',
             primaryColor: '#14b8a6',
-            initialStatus: 'sleep',
+            mobileDisplay: false,
             models: [
               {
                 path: "/tia/model.json",
@@ -78,6 +78,7 @@ const {
             statusBar: {
             mobileStyle: {
               marginBottom: "100px",
+              display: "none",
             },
             style: {
               marginBottom: "80px",
@@ -97,7 +98,7 @@ const {
                 },
           menus: {
             mobileStyle: {
-               display: none,
+               display: "none",
             },
             style: {
               marginLeft: "220px",
