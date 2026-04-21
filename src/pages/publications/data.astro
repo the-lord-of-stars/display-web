@@ -1,0 +1,43 @@
+---
+export const publications = [
+  {
+    year: '2026',
+    items: [
+      {
+        slug: 'awesomelit',
+        title: 'AwesomeLit: Towards Hypothesis Generation with Agent-Supported Literature Research',
+        authors: ['Zefei Xie', 'Yuhan Guo', 'Kai Xu'],
+        venue: 'EuroVis 2026 short paper',
+        description: 'A Human-AI collaborative hypothesis generation tool',
+        image: '/src/assets/pic/2.jpg',
+        pdf: 'https://arxiv.org/abs/2603.22648',
+        code: '',
+        doi: '',
+        bibtex: '',
+        online: '',
+        abstract:
+          'There are different goals for literature research, from understanding an unfamiliar topic to generate hypothesis for the next research project. The nature of literature research also varies according to user\'s familiarity level of the topic. For inexperienced researchers, identifying gaps in the existing literature and generating feasible hypothesis are crucial but challenging. While general "deep research\'\' tools can be used, they are not designed for such use case, thus often not effective. In addition, the "black box" nature and hallucination of Large Language Models (LLMs) often lead to distrust. In this paper, we introduce a human-agent collaborative visualization system AwesomeLit to address this need. It has several novel features: a transparent user-steerable agentic workflow; a dynamically generated query exploring tree, visualizing the exploration path and provenance; and a semantic similarity view, depicting the relationships between papers. It enables users to transition from general intentions to detailed research topics. Finally, a qualitative study involving several early researchers showed that AwesomeLit is effective in helping users explore unfamiliar topics, identify promising research directions, and improve confidence in research results.'}
+    ]
+  },
+  {
+    year: '2025',
+    items: [
+      {
+        slug: 'agentic-vis-report-generation',
+        title: 'What Happened to Automated Visualization? An Agentic Analysis',
+        authors: ['Weiyao Meng', 'Yuhan Guo', 'Zefei Xie', 'Kai Xu'],
+        venue: 'IEEE VIS 2025 GenAI Workshop',
+        description: 'An automated pipeline for visualisation analysis using LLM-based agent.',
+        image: '/src/assets/pic/1.png',
+        pdf: 'https://nottingham-repository.worktribe.com/output/54938787/what-happened-to-automated-visualization-an-agentic-analysis',
+        code: 'https://github.com/Vis4Sense/agentic-vis-2025',
+        doi: '',
+        bibtex: '',
+        online: 'https://vis4sense.github.io/agentic-vis-2025/',
+        abstract:
+          'Recently, foundation models, particularly large language models (LLMs), have shown great capabilities across a wide variety of tasks that were previously done by human, such as code generation and analytic reasoning. Such advances open new possibilities for further automating the data analysis process. This technical report presents the AgenticInsight system developed for the Agentic VIS Challenge 2025.\n' +
+          'AgenticInsight is an automated system that uses an agentic workflow to generate insights and visualizations from a given dataset. The agentic workflow is designed on the basis of a conceptual framework adapted from the visual analytics process model. Powered by the LLMs, the agent automates the essential steps in the visual analytics workflow, including planning, data transformation, visualization generation, analysis code generation, and knowledge extraction. Our workflow is designed to be generalizable and not tailored to a specific dataset. Meanwhile, it allows human users to specify high-level intentions, preferences, and domain knowledge in a separate configuration file, which is incorporated to guide the analytical process. As a result, our workflow can be applied to a range of analysis questions and domains. This report details the system design and decisions, demonstrates the system’s performance and generalizability, and presents reflections on building an automated LLM-powered analysis system.'}
+    ]
+  },
+]
+---

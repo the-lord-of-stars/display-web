@@ -101,36 +101,45 @@ const allPostsByDate = sortMDByDate(allPosts).slice(0, MAX_POSTS)
         )
       }
 
-      {
-        /* <Section title='Experience'>
-      <Card
-        heading='Lorem Ipsum'
-        subheading='Sit amet consectetur'
-        date='Dec 2022 - Nov 2023'
-        imagePath='/src/assets/about-astro.png'
-        altText='Lorem, ipsum dolor sit'
-        imageClass='h-12 w-auto md:-start-16'
-      >
-        <ul class='ms-4 list-disc text-muted-foreground'>
-          <li>
-            Lorem, ipsum dolor sit amet consectetur adipisicing elit. Dolore debitis recusandae, ut
-            molestiae laboriosam pariatur!
 
-            <li>Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestiae, pariatur!</li>
-          </li>
-        </ul>
-      </Card>
-      <Card
-        heading='Lorem Ipsum'
-        subheading='Sit amet consectetur'
-        date='Dec 2022 - Nov 2023'
-        imagePath='/src/assets/about-astro.png'
-        altText='Lorem, ipsum dolor sit'
-        imageClass='h-12 w-auto md:-start-16'
-      />
-    </Section> */
-      }
+    <!--   <Section title='Experience'>-->
+    <!--  <Card-->
+    <!--    heading='Lorem Ipsum'-->
+    <!--    subheading='Sit amet consectetur'-->
+    <!--    date='Dec 2022 - Nov 2023'-->
+    <!--    imagePath='/src/assets/about-astro.png'-->
+    <!--    altText='Lorem, ipsum dolor sit'-->
+    <!--    imageClass='h-12 w-auto md:-start-16'-->
+    <!--  >-->
+    <!--    <ul class='ms-4 list-disc text-muted-foreground'>-->
+    <!--      <li>-->
+    <!--        Lorem, ipsum dolor sit amet consectetur adipisicing elit. Dolore debitis recusandae, ut-->
+    <!--        molestiae laboriosam pariatur!-->
+
+    <!--        <li>Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestiae, pariatur!</li>-->
+    <!--      </li>-->
+    <!--    </ul>-->
+    <!--  </Card>-->
+    <!--  <Card-->
+    <!--    heading='Lorem Ipsum'-->
+    <!--    subheading='Sit amet consectetur'-->
+    <!--    date='Dec 2022 - Nov 2023'-->
+    <!--    imagePath='/src/assets/about-astro.png'-->
+    <!--    altText='Lorem, ipsum dolor sit'-->
+    <!--    imageClass='h-12 w-auto md:-start-16'-->
+    <!--  />-->
+    <!--</Section>-->
+
       <Section title='Education'>
+        <Card
+          as='a'
+          heading='Carnegie Mellon University'
+          subheading='Master of Science Intelligent Information System'
+          date='August 2026 - '
+          href='https://www.cmu.edu/'
+        >
+          {}
+        </Card>
         <Card
           as='a'
           heading='University of Nottingham'
@@ -144,29 +153,29 @@ const allPostsByDate = sortMDByDate(allPosts).slice(0, MAX_POSTS)
 
       <Section title='Projects'>
         <div class='grid grid-cols-1 gap-3 sm:grid-cols-2'>
-          <ProjectCard
+          <Card
+            as='a'
             href='https://vis4sense.github.io/agentic-vis-2025/'
-            heading='IEEE VIS 2025 GenxAI workshop challenge'
+            heading='IEEE VIS 2025 GenxAI challenge'
             subheading='An agent to generate visualization report'
-            imagePath='/src/assets/projects/alex-tyson-2BAXJ7ha74s-unsplash.jpg'
           />
-          <ProjectCard
+          <Card
+            as='a'
             href='https://the-lord-of-stars.github.io/Data-Analytics-and-AI-Curriculum-project/'
             heading='Quarto Template'
-            subheading='A template designed for UNUK mathmetics department'
-            imagePath='/src/assets/projects/angelica-teran-Bk9hpaXHK4o-unsplash.jpg'
+            subheading='A template for UNUK mathmetics center'
           />
-          <ProjectCard
+          <Card
+            as='a'
             href='https://github.com/the-lord-of-stars/team32-project'
             heading='IBM Watsonx Assistant'
             subheading='AI assistant for new students'
-            imagePath='/src/assets/projects/kseniia-zapiatkina-yATU3rg8tNI-unsplash.jpg'
           />
-          <ProjectCard
+          <Card
+            as='a'
             href='/projects'
             heading='More projects'
-            subheading='Check out more projects'
-            imagePath='/src/assets/projects/wen-qiao-g_w8I64FiO0-unsplash.jpg'
+            subheading='Check out more projects...'
           />
         </div>
       </Section>
