@@ -71,9 +71,20 @@ const {
                 path: "/tia/model.json",
                 position: [-25, 0],
                 scale: 0.4,
+                mobileScale: 0.2,
                 stageStyle: {width: 300, height: 250}
               }
             ],
+            statusBar: {
+            mobileStyle: {
+              marginBottom: "100px",
+            },
+            style: {
+              marginBottom: "80px",
+            },
+            restMessage: "Resting",
+            loadSuccessMessage: "Ready",
+            },
             tips:
                 {
                     style:
@@ -83,18 +94,18 @@ const {
                        left: "calc(50% - 20px)",
                        top: "-100px",
                     },
-                  // mobileStyle:
-                  //     {
-                  //       width: 115,
-                  //       height: 40,
-                  //       left: "calc(50 % -30px)",
-                  //       top: "-100px",
-                  //     }
+                  mobileStyle:
+                      {
+                        width: 115,
+                        height: 40,
+                        left: "calc(50% - 20px)",
+                        top: "-100px",
+                      }
                 },
           menus: {
-            // mobileStyle: {
-            //   marginLeft: "110px",
-            // },
+            mobileStyle: {
+              marginLeft: "110px",
+            },
             style: {
               marginLeft: "220px",
             },
