@@ -10,12 +10,20 @@ interface Props {
   headings?: MarkdownHeading[]
   view?: boolean
   comment?: boolean
+  highlightColor?: string
 }
 
-const { title, headings, view, comment: enableComment, ...props } = Astro.props
+const {
+  title,
+  headings,
+  view,
+  comment: enableComment,
+  highlightColor = '#8aa3b2',
+  ...props
+} = Astro.props
 ---
 
-<PageLayout meta={{ title }} {...props}>
+<PageLayout meta={{ title }} highlightColor={highlightColor} {...props}>
   {headings?.length && <TOC headings={headings} slot='sidebar' />}
 
   <Fragment slot='header'>

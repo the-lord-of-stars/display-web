@@ -4,9 +4,6 @@ import type { SiteMeta } from 'astro-pure/types'
 import BaseHead from '@/components/BaseHead.astro'
 import config from '@/site-config'
 
-
-// Import the global.css file here so that it is included on
-// all pages through the use of the <BaseLayout /> component.
 import '@/assets/styles/app.css'
 
 interface Props {
@@ -37,19 +34,24 @@ const {
         />
       )
     }
-    <div class='w-full max-w-[70rem] px-4 sm:px-7 lg:px-10 min-h-[100dvh] flex flex-col justify-between'>
+
+    <div
+      class='w-full max-w-[70rem] px-4 sm:px-7 lg:px-10 min-h-[100dvh] flex flex-col justify-between'
+    >
       <Header />
+
       <div class='flex-1 w-full'>
         <slot />
       </div>
+
       <Footer />
     </div>
 
-    {/* Set highlight color */}
     <style define:vars={{ highlightColor }}>
       :global(.highlight) {
         color: var(--highlightColor, hsl(var(--primary) / var(--un-text-opacity))) !important;
       }
+
       :global(.highlight-bg) {
         background-color: var(
           --highlightColor,
@@ -58,9 +60,9 @@ const {
       }
     </style>
 
-    <script src="https://unpkg.com/oh-my-live2d@latest" is:inline></script>
+    <script src='https://unpkg.com/oh-my-live2d@latest' is:inline></script>
     <script is:inline>
-      window.addEventListener("DOMContentLoaded", () => {
+      window.addEventListener('DOMContentLoaded', () => {
         if (window.OML2D) {
           OML2D.loadOml2d({
             dockedPosition: 'right',
@@ -68,62 +70,57 @@ const {
             mobileDisplay: false,
             models: [
               {
-                path: "/tia/model.json",
+                path: '/tia/model.json',
                 position: [-25, 0],
                 scale: 0.4,
-                // mobileScale: 0.2,
-                stageStyle: {width: 300, height: 250}
+                stageStyle: { width: 300, height: 250 }
               }
             ],
             statusBar: {
-            mobileStyle: {
-              marginBottom: "100px",
-              display: "none",
-            },
-            style: {
-              marginBottom: "80px",
-            },
-            restMessage: "Resting",
-            loadSuccessMessage: "Ready",
-            },
-            tips:
-                {
-                    style:
-                    {
-                       width: 230,
-                       height: 120,
-                       left: "calc(50% - 20px)",
-                       top: "-100px",
-                    },
-                },
-          menus: {
-            mobileStyle: {
-               display: "none",
-            },
-            style: {
-              marginLeft: "220px",
-            },
-            items: [
-              {
-                id: "Rest",
-                icon: "icon-rest",
-                title: "rest",
-                onClick: (oml2d) => {
-                  oml2d.stageSlideOut();
-                  oml2d.setStatusBarClickEvent(() => {
-                    oml2d.stageSlideIn();
-                    oml2d.statusBarClose("Success");
-                  });
-                  oml2d.statusBarOpen("Resting");
-                },
+              mobileStyle: {
+                marginBottom: '100px',
+                display: 'none'
               },
-            ],
-          },
-
-          });
+              style: {
+                marginBottom: '80px'
+              },
+              restMessage: 'Resting',
+              loadSuccessMessage: 'Ready'
+            },
+            tips: {
+              style: {
+                width: 230,
+                height: 120,
+                left: 'calc(50% - 20px)',
+                top: '-100px'
+              }
+            },
+            menus: {
+              mobileStyle: {
+                display: 'none'
+              },
+              style: {
+                marginLeft: '220px'
+              },
+              items: [
+                {
+                  id: 'Rest',
+                  icon: 'icon-rest',
+                  title: 'rest',
+                  onClick: (oml2d) => {
+                    oml2d.stageSlideOut()
+                    oml2d.setStatusBarClickEvent(() => {
+                      oml2d.stageSlideIn()
+                      oml2d.statusBarClose('Success')
+                    })
+                    oml2d.statusBarOpen('Resting')
+                  }
+                }
+              ]
+            }
+          })
         }
-      });
+      })
     </script>
-
   </body>
 </html>

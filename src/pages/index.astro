@@ -12,9 +12,9 @@ import SkillLayout from '@/components/home/SkillLayout.astro'
 import avatar from '@/assets/avatar.png'
 import config from '@/site-config'
 
-const languages = ['Python','Java','Haskell','C','Assembly Language']
-const frontend = ['TypeScript', 'Tailwind', 'React',]
-const backend = ['SQL', 'Milvus', 'Chroma',]
+const languages = ['Python', 'Java', 'Haskell', 'C', 'Assembly Language']
+const frontend = ['TypeScript', 'Tailwind', 'React']
+const backend = ['SQL', 'Milvus', 'Chroma']
 const libraries = ['LangChain', 'Scikit-learn', 'Numpy', 'NLTK', 'LangGraph']
 const framework = ['Vercel', 'Waline', 'Hexo', 'Quarto', 'Flask', 'Gradio', 'FastAPI']
 
@@ -24,170 +24,646 @@ const allPostsByDate = sortMDByDate(allPosts).slice(0, MAX_POSTS)
 ---
 
 <PageLayout meta={{ title: 'Home' }} highlightColor='#8aa3b2'>
-  <main class='flex w-full flex-col items-center'>
-    <section class='animate mb-10 flex flex-col items-center gap-y-7' id='content-header'>
-      <Image
-        src={avatar}
-        alt='profile'
-        class='h-28 w-auto rounded-full border p-1'
-        loading='eager'
-      />
+  <canvas id='home-ai-canvas' class='home-ai-canvas' aria-hidden='true'></canvas>
+
+  <main class='relative z-10 flex w-full flex-col items-center'>
+    <section class='hero-enter mb-10 flex flex-col items-center gap-y-7' id='content-header'>
+      <div class='hero-avatar-wrap'>
+        <Image
+          src={avatar}
+          alt='profile'
+          class='hero-avatar h-28 w-auto rounded-full border p-1'
+          loading='eager'
+        />
+      </div>
 
       <div class='flex flex-col items-center gap-y-4'>
-        <h1 class='text-3xl font-bold'>{config.author}</h1>
-        <div class='flex flex-wrap justify-center gap-x-7 gap-y-3'>
-          <Label title='United Kingdom'>
-            <Icon name='location' class='size-5' slot='icon' />
-          </Label>
-          <Label
-            title='Github'
-            as='a'
-            href='https://github.com/the-lord-of-stars'
-            target='_blank'
-          >
-            <Icon name='github' class='size-5' slot='icon' />
-          </Label>
-          <Label
+        <h1 class='hero-title text-3xl font-bold'>{config.author}</h1>
+
+        <div class='hero-labels flex flex-wrap justify-center gap-x-7 gap-y-3'>
+          <div class='hero-label-item'>
+            <Label title='United Kingdom'>
+              <Icon name='location' class='size-5' slot='icon' />
+            </Label>
+          </div>
+
+          <div class='hero-label-item'>
+            <Label
+              title='Github'
+              as='a'
+              href='https://github.com/the-lord-of-stars'
+              target='_blank'
+            >
+              <Icon name='github' class='size-5' slot='icon' />
+            </Label>
+          </div>
+
+          <div class='hero-label-item'>
+            <Label
               title='LinkedIn'
               as='a'
               href='https://www.linkedin.com/in/zefei-xie-023644339/'
               target='_blank'
-          >
-            <Icon name='link' class='size-5' slot='icon' />
-          </Label>
-          <Label
+            >
+              <Icon name='link' class='size-5' slot='icon' />
+            </Label>
+          </div>
+
+          <div class='hero-label-item'>
+            <Label
               title='Discord'
               as='a'
               href='https://discordapp.com/users/1288076012713807895'
               target='_blank'
-          >
-            <Icon name='discord' class='size-5' slot='icon' />
-          </Label>
-          <Label
-              title='Email me'
-              as='a'
-              href='mailto:<1506894634@qq.com>'
-              target='_blank'
-          >
-            <Icon name='email' class='size-5' slot='icon' />
-          </Label>
+            >
+              <Icon name='discord' class='size-5' slot='icon' />
+            </Label>
+          </div>
+
+          <div class='hero-label-item'>
+            <Label title='Email me' as='a' href='mailto:1506894634@qq.com' target='_blank'>
+              <Icon name='email' class='size-5' slot='icon' />
+            </Label>
+          </div>
         </div>
       </div>
     </section>
 
     <div id='content' class='animate flex flex-col gap-y-10 md:w-4/5 lg:w-5/6'>
       <Section title='About'>
-        <p class='text-muted-foreground'>CSAI Student</p>
-        <p class='text-muted-foreground'>
-          I'm a <strong>technology enthusiast</strong> with a passion for <strong>AI, data integration, and software development</strong>. Currently, I'm a student at <a href='https://www.nottingham.ac.uk/' target='_blank' rel='noopener noreferrer' style='text-decoration: underline;'><strong>University of Nottingham</strong></a>, where I explore <strong>AI-driven schema matching and interoperability solutions</strong>.
+        <div class='scroll-reveal'>
+          <p class='text-muted-foreground'>CSAI Student</p>
 
-          My research focuses on investigating ways AI can enhance <strong>data mapping and processing</strong>, with particular interest in <strong>AI agents</strong>. I'm especially interested in applying artificial intelligence to natural language processing, as well as making sense of complex data structures through <strong>data science and engineering</strong>.
+          <p class='text-muted-foreground'>
+            I'm a <strong>technology enthusiast</strong> with a passion for
+            <strong>AI, data integration, and software development</strong>. Currently, I'm a
+            student at
+            <a
+              href='https://www.nottingham.ac.uk/'
+              target='_blank'
+              rel='noopener noreferrer'
+              style='text-decoration: underline;'
+            >
+              <strong>University of Nottingham</strong>
+            </a>, where I explore
+            <strong>AI-driven schema matching and interoperability solutions</strong>. My research
+            focuses on investigating ways AI can enhance
+            <strong>data mapping and processing</strong>, with particular interest in
+            <strong>AI agents</strong>. I'm especially interested in applying artificial
+            intelligence to natural language processing, as well as making sense of complex data
+            structures through <strong>data science and engineering</strong>.
+          </p>
 
-        </p>
-        <Button title='More about me' class='w-fit self-end' href='/about' variant='ahead' />
+          <Button title='More about me' class='w-fit self-end' href='/about' variant='ahead' />
+        </div>
       </Section>
+
       {
         allPostsByDate.length > 0 && (
-          <Section title='Posts'>
-            <ul class='flex flex-col gap-y-1.5 sm:gap-y-2'>
-              {allPostsByDate.map((p) => (
-                <li class='flex flex-col gap-x-2 sm:flex-row'>
-                  <PostPreview post={p} detailed/>
-                </li>
-              ))}
-            </ul>
-            <Button title='More posts' class='w-fit self-end' href='/blog' variant='ahead' />
-          </Section>
+          <div class='scroll-reveal blog-section-reveal'>
+            <Section title='Posts'>
+              <ul class='flex flex-col gap-y-1.5 sm:gap-y-2'>
+                {allPostsByDate.map((p, index) => (
+                  <li
+                    class={`blog-post-reveal delay-${index + 1} flex flex-col gap-x-2 sm:flex-row`}
+                  >
+                    <PostPreview post={p} detailed />
+                  </li>
+                ))}
+              </ul>
+
+              <div class='blog-post-reveal delay-3 flex justify-end'>
+                <Button title='More posts' class='w-fit self-end' href='/blog' variant='ahead' />
+              </div>
+            </Section>
+          </div>
         )
       }
 
-
-    <!--   <Section title='Experience'>-->
-    <!--  <Card-->
-    <!--    heading='Lorem Ipsum'-->
-    <!--    subheading='Sit amet consectetur'-->
-    <!--    date='Dec 2022 - Nov 2023'-->
-    <!--    imagePath='/src/assets/about-astro.png'-->
-    <!--    altText='Lorem, ipsum dolor sit'-->
-    <!--    imageClass='h-12 w-auto md:-start-16'-->
-    <!--  >-->
-    <!--    <ul class='ms-4 list-disc text-muted-foreground'>-->
-    <!--      <li>-->
-    <!--        Lorem, ipsum dolor sit amet consectetur adipisicing elit. Dolore debitis recusandae, ut-->
-    <!--        molestiae laboriosam pariatur!-->
-
-    <!--        <li>Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestiae, pariatur!</li>-->
-    <!--      </li>-->
-    <!--    </ul>-->
-    <!--  </Card>-->
-    <!--  <Card-->
-    <!--    heading='Lorem Ipsum'-->
-    <!--    subheading='Sit amet consectetur'-->
-    <!--    date='Dec 2022 - Nov 2023'-->
-    <!--    imagePath='/src/assets/about-astro.png'-->
-    <!--    altText='Lorem, ipsum dolor sit'-->
-    <!--    imageClass='h-12 w-auto md:-start-16'-->
-    <!--  />-->
-    <!--</Section>-->
-
       <Section title='Education'>
-        <Card
-          as='a'
-          heading='Carnegie Mellon University'
-          subheading='Master of Science Intelligent Information System'
-          date='August 2026 - '
-          href='https://www.cmu.edu/'
-        >
-          {}
-        </Card>
-        <Card
-          as='a'
-          heading='University of Nottingham'
-          subheading='BSc Hons Computer Science with Artificial Intelligence'
-          date='September 2022 - July 2026'
-          href='https://www.nottingham.ac.uk/studywithus/ugstudy/courses/UG/Computer-Science-with-Artificial-Intelligence-BSc-Hons-U6UCMPAI.html'
-        >
-          {}
-        </Card>
+        <div class='scroll-reveal scroll-reveal-left delay-1'>
+          <Card
+            as='a'
+            heading='Carnegie Mellon University'
+            subheading='Master of Science Intelligent Information System'
+            date='August 2026 - '
+            href='https://www.cmu.edu/'
+          >
+            {}
+          </Card>
+        </div>
+
+        <div class='scroll-reveal scroll-reveal-right delay-2'>
+          <Card
+            as='a'
+            heading='University of Nottingham'
+            subheading='BSc Hons Computer Science with Artificial Intelligence'
+            date='September 2022 - July 2026'
+            href='https://www.nottingham.ac.uk/studywithus/ugstudy/courses/UG/Computer-Science-with-Artificial-Intelligence-BSc-Hons-U6UCMPAI.html'
+          >
+            {}
+          </Card>
+        </div>
       </Section>
 
       <Section title='Projects'>
         <div class='grid grid-cols-1 gap-3 sm:grid-cols-2'>
-          <Card
-            as='a'
-            href='https://vis4sense.github.io/agentic-vis-2025/'
-            heading='IEEE VIS 2025 GenxAI challenge'
-            subheading='An agent to generate visualization report'
-          />
-          <Card
-            as='a'
-            href='https://the-lord-of-stars.github.io/Data-Analytics-and-AI-Curriculum-project/'
-            heading='Quarto Template'
-            subheading='A template for UNUK mathmetics center'
-          />
-          <Card
-            as='a'
-            href='https://github.com/the-lord-of-stars/team32-project'
-            heading='IBM Watsonx Assistant'
-            subheading='AI assistant for new students'
-          />
-          <Card
-            as='a'
-            href='/projects'
-            heading='More projects'
-            subheading='Check out more projects...'
-          />
+          <div class='scroll-reveal scroll-reveal-left delay-1'>
+            <Card
+              as='a'
+              href='https://vis4sense.github.io/agentic-vis-2025/'
+              heading='IEEE VIS 2025 GenxAI challenge'
+              subheading='An agent to generate visualization report'
+            />
+          </div>
+
+          <div class='scroll-reveal scroll-reveal-right delay-2'>
+            <Card
+              as='a'
+              href='https://the-lord-of-stars.github.io/Data-Analytics-and-AI-Curriculum-project/'
+              heading='Quarto Template'
+              subheading='A template for UNUK mathmetics center'
+            />
+          </div>
+
+          <div class='scroll-reveal scroll-reveal-left delay-2'>
+            <Card
+              as='a'
+              href='https://github.com/the-lord-of-stars/team32-project'
+              heading='IBM Watsonx Assistant'
+              subheading='AI assistant for new students'
+            />
+          </div>
+
+          <div class='scroll-reveal scroll-reveal-right delay-3'>
+            <Card
+              as='a'
+              href='/projects'
+              heading='More projects'
+              subheading='Check out more projects...'
+            />
+          </div>
         </div>
       </Section>
 
-
       <Section title='Skills'>
-        <SkillLayout title='Languages' skills={languages} />
-        <SkillLayout title='Frontend' skills={frontend} />
-        <SkillLayout title='Backend' skills={backend} />
-        <SkillLayout title='Libraries' skills={libraries} />
-        <SkillLayout title='Framework' skills={framework} />
+        <div class='scroll-reveal delay-1'>
+          <SkillLayout title='Languages' skills={languages} />
+        </div>
+
+        <div class='scroll-reveal delay-2'>
+          <SkillLayout title='Frontend' skills={frontend} />
+        </div>
+
+        <div class='scroll-reveal delay-3'>
+          <SkillLayout title='Backend' skills={backend} />
+        </div>
+
+        <div class='scroll-reveal delay-1'>
+          <SkillLayout title='Libraries' skills={libraries} />
+        </div>
+
+        <div class='scroll-reveal delay-2'>
+          <SkillLayout title='Framework' skills={framework} />
+        </div>
       </Section>
     </div>
   </main>
 </PageLayout>
+
+<script>
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-visible')
+          observer.unobserve(entry.target)
+        }
+      })
+    },
+    {
+      threshold: 0.15,
+      rootMargin: '0px 0px -80px 0px'
+    }
+  )
+
+  document.querySelectorAll('.scroll-reveal').forEach((el) => {
+    observer.observe(el)
+  })
+
+  const homeCanvas = document.getElementById('home-ai-canvas')
+  const homeCtx = homeCanvas?.getContext('2d')
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+
+  if (homeCanvas && homeCtx && !reduceMotion) {
+    let width = 0
+    let height = 0
+    let dpr = 1
+    let nodes = []
+    let rafId = 0
+
+    const pointer = {
+      x: -9999,
+      y: -9999
+    }
+
+    function resizeHomeCanvas() {
+      dpr = Math.min(window.devicePixelRatio || 1, 2)
+
+      width = window.innerWidth
+      height = window.innerHeight
+
+      homeCanvas.width = Math.floor(width * dpr)
+      homeCanvas.height = Math.floor(height * dpr)
+      homeCanvas.style.width = width + 'px'
+      homeCanvas.style.height = height + 'px'
+
+      homeCtx.setTransform(dpr, 0, 0, dpr, 0, 0)
+
+      nodes = []
+
+      const count = width < 768 ? 42 : 120
+
+      for (let i = 0; i < count; i++) {
+        nodes.push({
+          x: Math.random() * width,
+          y: Math.random() * height,
+          vx: (Math.random() - 0.5) * 0.18,
+          vy: (Math.random() - 0.5) * 0.18,
+          r: Math.random() * 2.1 + 0.9
+        })
+      }
+    }
+
+    function drawHomeCanvas() {
+      homeCtx.clearRect(0, 0, width, height)
+
+      const bg = homeCtx.createRadialGradient(
+        width * 0.5,
+        height * 0.2,
+        0,
+        width * 0.5,
+        height * 0.2,
+        Math.max(width, height) * 0.82
+      )
+
+      bg.addColorStop(0, 'rgba(20, 184, 166, 0.12)')
+      bg.addColorStop(0.45, 'rgba(138, 163, 178, 0.06)')
+      bg.addColorStop(1, 'rgba(138, 163, 178, 0)')
+
+      homeCtx.fillStyle = bg
+      homeCtx.fillRect(0, 0, width, height)
+
+      for (const node of nodes) {
+        node.x += node.vx
+        node.y += node.vy
+
+        if (node.x < -20) node.x = width + 20
+        if (node.x > width + 20) node.x = -20
+        if (node.y < -20) node.y = height + 20
+        if (node.y > height + 20) node.y = -20
+
+        const dx = pointer.x - node.x
+        const dy = pointer.y - node.y
+        const dist = Math.sqrt(dx * dx + dy * dy)
+
+        if (dist < 160) {
+          node.x -= dx * 0.0016
+          node.y -= dy * 0.0016
+        }
+      }
+
+      for (let i = 0; i < nodes.length; i++) {
+        for (let j = i + 1; j < nodes.length; j++) {
+          const a = nodes[i]
+          const b = nodes[j]
+          const dx = a.x - b.x
+          const dy = a.y - b.y
+          const dist = Math.sqrt(dx * dx + dy * dy)
+          const maxDist = width < 768 ? 80 : 120
+
+          if (dist < maxDist) {
+            const opacity = (1 - dist / maxDist) * 0.2
+
+            homeCtx.beginPath()
+            homeCtx.moveTo(a.x, a.y)
+            homeCtx.lineTo(b.x, b.y)
+            homeCtx.strokeStyle = `rgba(20, 184, 166, ${opacity})`
+            homeCtx.lineWidth = 1
+            homeCtx.stroke()
+          }
+        }
+      }
+
+      for (const node of nodes) {
+        homeCtx.beginPath()
+        homeCtx.arc(node.x, node.y, node.r, 0, Math.PI * 2)
+        homeCtx.fillStyle = 'rgba(20, 184, 166, 0.52)'
+        homeCtx.fill()
+      }
+
+      rafId = window.requestAnimationFrame(drawHomeCanvas)
+    }
+
+    function handlePointerMove(event) {
+      pointer.x = event.clientX
+      pointer.y = event.clientY
+    }
+
+    function handlePointerLeave() {
+      pointer.x = -9999
+      pointer.y = -9999
+    }
+
+    resizeHomeCanvas()
+    drawHomeCanvas()
+
+    window.addEventListener('resize', resizeHomeCanvas)
+    window.addEventListener('pointermove', handlePointerMove)
+    window.addEventListener('pointerleave', handlePointerLeave)
+
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) {
+        window.cancelAnimationFrame(rafId)
+      } else {
+        drawHomeCanvas()
+      }
+    })
+  }
+</script>
+
+<style>
+  .home-ai-canvas {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    display: block;
+    width: 100vw;
+    height: 100vh;
+    pointer-events: none;
+    opacity: 0.68;
+  }
+
+  .hero-enter {
+    position: relative;
+    isolation: isolate;
+    animation: heroFadeIn 1s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+
+  .hero-enter::before {
+    content: '';
+    position: absolute;
+    top: -48px;
+    left: 50%;
+    z-index: -1;
+    width: 260px;
+    height: 260px;
+    border-radius: 9999px;
+    background: radial-gradient(circle, rgba(138, 163, 178, 0.32), transparent 62%);
+    transform: translateX(-50%) scale(0.6);
+    opacity: 0;
+    filter: blur(16px);
+    animation: heroGlow 1.35s cubic-bezier(0.22, 1, 0.36, 1) 0.1s both;
+  }
+
+  .hero-avatar-wrap {
+    position: relative;
+    animation: avatarDropIn 1s cubic-bezier(0.16, 1, 0.3, 1) 0.1s both;
+  }
+
+  .hero-avatar-wrap::after {
+    content: '';
+    position: absolute;
+    inset: -8px;
+    z-index: -1;
+    border-radius: 9999px;
+    border: 1px solid rgba(138, 163, 178, 0.35);
+    opacity: 0;
+    transform: scale(0.72);
+    animation: avatarRing 1.2s cubic-bezier(0.22, 1, 0.36, 1) 0.35s both;
+  }
+
+  .hero-avatar {
+    box-shadow:
+      0 18px 60px rgba(15, 23, 42, 0.12),
+      0 0 0 1px rgba(138, 163, 178, 0.12);
+  }
+
+  .hero-title {
+    opacity: 0;
+    letter-spacing: 0.24em;
+    transform: translate3d(0, 24px, 0) scale(0.96);
+    filter: blur(8px);
+    animation: titleReveal 0.95s cubic-bezier(0.22, 1, 0.36, 1) 0.38s both;
+  }
+
+  .hero-label-item {
+    opacity: 0;
+    transform: translate3d(0, 18px, 0) scale(0.86);
+    filter: blur(6px);
+    animation: labelPop 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+  }
+
+  .hero-label-item:nth-child(1) {
+    animation-delay: 0.62s;
+  }
+
+  .hero-label-item:nth-child(2) {
+    animation-delay: 0.7s;
+  }
+
+  .hero-label-item:nth-child(3) {
+    animation-delay: 0.78s;
+  }
+
+  .hero-label-item:nth-child(4) {
+    animation-delay: 0.86s;
+  }
+
+  .hero-label-item:nth-child(5) {
+    animation-delay: 0.94s;
+  }
+
+  .scroll-reveal {
+    opacity: 0;
+    transform: translate3d(0, 56px, 0) scale(0.96);
+    filter: blur(10px);
+    transition:
+      opacity 0.85s cubic-bezier(0.22, 1, 0.36, 1),
+      transform 0.85s cubic-bezier(0.22, 1, 0.36, 1),
+      filter 0.85s cubic-bezier(0.22, 1, 0.36, 1);
+    will-change: opacity, transform, filter;
+  }
+
+  .scroll-reveal.is-visible {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+    filter: blur(0);
+  }
+
+  .scroll-reveal-left {
+    transform: translate3d(-72px, 48px, 0) scale(0.95);
+  }
+
+  .scroll-reveal-right {
+    transform: translate3d(72px, 48px, 0) scale(0.95);
+  }
+
+  .scroll-reveal-left.is-visible,
+  .scroll-reveal-right.is-visible {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+
+  .delay-1 {
+    transition-delay: 0.08s;
+  }
+
+  .delay-2 {
+    transition-delay: 0.16s;
+  }
+
+  .delay-3 {
+    transition-delay: 0.24s;
+  }
+
+  .blog-section-reveal.is-visible .blog-post-reveal {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+    filter: blur(0);
+  }
+
+  .blog-post-reveal {
+    opacity: 0;
+    transform: translate3d(0, 36px, 0) scale(0.98);
+    filter: blur(8px);
+    transition:
+      opacity 0.75s cubic-bezier(0.22, 1, 0.36, 1),
+      transform 0.75s cubic-bezier(0.22, 1, 0.36, 1),
+      filter 0.75s cubic-bezier(0.22, 1, 0.36, 1);
+    will-change: opacity, transform, filter;
+  }
+
+  @keyframes heroFadeIn {
+    from {
+      opacity: 0;
+      transform: translate3d(0, 24px, 0);
+    }
+
+    to {
+      opacity: 1;
+      transform: translate3d(0, 0, 0);
+    }
+  }
+
+  @keyframes heroGlow {
+    from {
+      opacity: 0;
+      transform: translateX(-50%) scale(0.5);
+    }
+
+    45% {
+      opacity: 1;
+    }
+
+    to {
+      opacity: 0.75;
+      transform: translateX(-50%) scale(1);
+    }
+  }
+
+  @keyframes avatarDropIn {
+    from {
+      opacity: 0;
+      transform: translate3d(0, -28px, 0) scale(0.78) rotate(-4deg);
+      filter: blur(12px);
+    }
+
+    70% {
+      opacity: 1;
+      transform: translate3d(0, 4px, 0) scale(1.04) rotate(1deg);
+      filter: blur(0);
+    }
+
+    to {
+      opacity: 1;
+      transform: translate3d(0, 0, 0) scale(1) rotate(0deg);
+      filter: blur(0);
+    }
+  }
+
+  @keyframes avatarRing {
+    from {
+      opacity: 0;
+      transform: scale(0.72);
+    }
+
+    55% {
+      opacity: 1;
+    }
+
+    to {
+      opacity: 0;
+      transform: scale(1.35);
+    }
+  }
+
+  @keyframes titleReveal {
+    from {
+      opacity: 0;
+      letter-spacing: 0.24em;
+      transform: translate3d(0, 24px, 0) scale(0.96);
+      filter: blur(8px);
+    }
+
+    to {
+      opacity: 1;
+      letter-spacing: normal;
+      transform: translate3d(0, 0, 0) scale(1);
+      filter: blur(0);
+    }
+  }
+
+  @keyframes labelPop {
+    from {
+      opacity: 0;
+      transform: translate3d(0, 18px, 0) scale(0.86);
+      filter: blur(6px);
+    }
+
+    70% {
+      opacity: 1;
+      transform: translate3d(0, -2px, 0) scale(1.06);
+      filter: blur(0);
+    }
+
+    to {
+      opacity: 1;
+      transform: translate3d(0, 0, 0) scale(1);
+      filter: blur(0);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .home-ai-canvas {
+      display: none;
+    }
+
+    .scroll-reveal,
+    .scroll-reveal-left,
+    .scroll-reveal-right,
+    .blog-section-reveal,
+    .blog-post-reveal,
+    .hero-enter,
+    .hero-enter::before,
+    .hero-avatar-wrap,
+    .hero-avatar-wrap::after,
+    .hero-title,
+    .hero-label-item {
+      opacity: 1;
+      transform: none;
+      filter: none;
+      animation: none;
+      transition: none;
+    }
+  }
+</style>
