@@ -57,7 +57,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     nodes = []
 
-    const count = width < 768 ? 42 : 120
+    const count = width < 768 ? 22 : 66
 
     for (let i = 0; i < count; i++) {
       nodes.push({
