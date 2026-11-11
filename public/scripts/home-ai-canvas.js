@@ -82,9 +82,9 @@ document.addEventListener('DOMContentLoaded', () => {
       Math.max(width, height) * 0.82
     )
 
-    bg.addColorStop(0, 'rgba(20, 184, 166, 0.12)')
-    bg.addColorStop(0.45, 'rgba(138, 163, 178, 0.06)')
-    bg.addColorStop(1, 'rgba(138, 163, 178, 0)')
+    bg.addColorStop(0, 'rgba(176, 128, 72, 0.12)')
+    bg.addColorStop(0.45, 'rgba(196, 154, 82, 0.06)')
+    bg.addColorStop(1, 'rgba(196, 154, 82, 0)')
 
     homeCtx.fillStyle = bg
     homeCtx.fillRect(0, 0, width, height)
@@ -124,7 +124,7 @@ document.addEventListener('DOMContentLoaded', () => {
           homeCtx.beginPath()
           homeCtx.moveTo(a.x, a.y)
           homeCtx.lineTo(b.x, b.y)
-          homeCtx.strokeStyle = `rgba(20, 184, 166, ${opacity})`
+          homeCtx.strokeStyle = `rgba(176, 128, 72, ${opacity})`
           homeCtx.lineWidth = 1
           homeCtx.stroke()
         }
@@ -134,7 +134,7 @@ document.addEventListener('DOMContentLoaded', () => {
     for (const node of nodes) {
       homeCtx.beginPath()
       homeCtx.arc(node.x, node.y, node.r, 0, Math.PI * 2)
-      homeCtx.fillStyle = 'rgba(20, 184, 166, 0.52)'
+      homeCtx.fillStyle = 'rgba(176, 128, 72, 0.52)'
       homeCtx.fill()
     }
 

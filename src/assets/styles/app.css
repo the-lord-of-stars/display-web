@@ -17,47 +17,47 @@ html {
 
 /* Theme */
 :root {
-  --background: 210 33% 99%;
-  --foreground: 240 10% 3.9%;
-  --card: 0 0% 100%;
-  --card-foreground: 240 10% 3.9%;
-  --popover: 0 0% 100%;
-  --popover-foreground: 240 10% 3.9%;
-  --primary: 200 29% 45%;
-  --primary-foreground: 0 0% 92.5%;
-  --secondary: 240 4.8% 95.9%;
-  --secondary-foreground: 240 5.9% 10%;
-  --muted: 240 4.8% 95%;
-  --muted-foreground: 240 3.8% 28.1%;
-  --accent: 240 4.8% 95.9%;
-  --accent-foreground: 240 5.9% 10%;
+  --background: 43 50% 97%;
+  --foreground: 12 22% 14%;
+  --card: 45 60% 99%;
+  --card-foreground: 12 22% 14%;
+  --popover: 45 60% 99%;
+  --popover-foreground: 12 22% 14%;
+  --primary: 18 30% 40%;
+  --primary-foreground: 43 60% 96%;
+  --secondary: 40 38% 92%;
+  --secondary-foreground: 12 22% 14%;
+  --muted: 40 38% 93%;
+  --muted-foreground: 15 12% 32%;
+  --accent: 40 38% 92%;
+  --accent-foreground: 12 22% 14%;
   --destructive: 0 72.22% 50.59%;
   --destructive-foreground: 0 0% 98%;
-  --border: 240 5.9% 88%;
-  --input: 240 5.9% 90%;
-  --ring: 240 5.9% 10%;
+  --border: 36 26% 85%;
+  --input: 36 26% 88%;
+  --ring: 18 30% 40%;
   --radius: 0.5rem;
 }
 .dark {
-  --background: 240 20.54% 5.2%;
-  --foreground: 0 0% 98%;
-  --card: 240 10% 3.9%;
-  --card-foreground: 0 0% 98%;
-  --popover: 240 10% 3.9%;
-  --popover-foreground: 0 0% 98%;
-  --primary: 195 95% 85%;
-  --primary-foreground: 240 3.7% 15.9%;
-  --secondary: 240 3.7% 15.9%;
-  --secondary-foreground: 0 0% 98%;
-  --muted: 240 5.9% 12%;
-  --muted-foreground: 240 5% 74.9%;
-  --accent: 240 3.7% 15.9%;
-  --accent-foreground: 0 0% 98%;
+  --background: 18 18% 6%;
+  --foreground: 40 40% 95%;
+  --card: 18 15% 8%;
+  --card-foreground: 40 40% 95%;
+  --popover: 18 15% 8%;
+  --popover-foreground: 40 40% 95%;
+  --primary: 43 85% 80%;
+  --primary-foreground: 18 20% 14%;
+  --secondary: 20 12% 15%;
+  --secondary-foreground: 40 40% 95%;
+  --muted: 20 12% 12%;
+  --muted-foreground: 35 15% 75%;
+  --accent: 20 12% 15%;
+  --accent-foreground: 40 40% 95%;
   --destructive: 0 62.8% 30.6%;
   --destructive-foreground: 0 0% 98%;
-  --border: 240 3.7% 19.9%;
-  --input: 240 3.7% 15.9%;
-  --ring: 240 4.9% 83.9%;
+  --border: 22 12% 20%;
+  --input: 20 12% 15%;
+  --ring: 43 50% 80%;
 }
 :root {
   --un-default-border-color: hsl(var(--border) / 1);

@@ -23,7 +23,7 @@ const allPosts = await getBlogCollection()
 const allPostsByDate = sortMDByDate(allPosts).slice(0, MAX_POSTS)
 ---
 
-<PageLayout meta={{ title: 'Home' }} highlightColor='#8aa3b2'>
+<PageLayout meta={{ title: 'Home' }} highlightColor='#c49a52'>
   <canvas id='home-ai-canvas' class='home-ai-canvas' aria-hidden='true'></canvas>
 
   <main class='relative z-10 flex w-full flex-col items-center'>
@@ -38,7 +38,9 @@ const allPostsByDate = sortMDByDate(allPosts).slice(0, MAX_POSTS)
       </div>
 
       <div class='flex flex-col items-center gap-y-4'>
-        <h1 class='hero-title text-3xl font-bold'>{config.author}</h1>
+        <h1 class='hero-title text-3xl font-bold'>
+          <span class='hero-title-inner'>{config.author}</span>
+        </h1>
 
         <div class='hero-labels flex flex-wrap justify-center gap-x-7 gap-y-3'>
           <div class='hero-label-item'>
@@ -89,9 +91,9 @@ const allPostsByDate = sortMDByDate(allPosts).slice(0, MAX_POSTS)
       </div>
     </section>
 
-    <div id='content' class='animate flex flex-col gap-y-10 md:w-4/5 lg:w-5/6'>
+    <div id='content' class='flex flex-col gap-y-10 md:w-4/5 lg:w-5/6'>
       <Section title='About'>
-        <div class='scroll-reveal'>
+        <div class='first-screen-reveal'>
           <p class='text-muted-foreground'>CSAI Student</p>
 
           <p class='text-muted-foreground'>
@@ -231,9 +233,17 @@ const allPostsByDate = sortMDByDate(allPosts).slice(0, MAX_POSTS)
   </main>
 </PageLayout>
 
-<script src="/scripts/home-ai-canvas.js" defer></script>
+<script src='/scripts/home-ai-canvas.js' defer></script>
 
 <style>
+  /*
+   * Entrance choreography: one easing curve, no overshoot, small distances.
+   * Order: background → avatar → name → links → content.
+   */
+  :root {
+    --ease-out-soft: cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
   .home-ai-canvas {
     inset: 0;
     z-index: 0;
@@ -245,151 +255,202 @@ const allPostsByDate = sortMDByDate(allPosts).slice(0, MAX_POSTS)
     left: 0;
     pointer-events: none;
     opacity: 0.68;
+    animation: canvasFade 1.6s ease-out both;
   }
 
   .hero-enter {
     position: relative;
     isolation: isolate;
-    animation: heroFadeIn 1s cubic-bezier(0.22, 1, 0.36, 1) both;
   }
 
+  /* Warm halo behind the avatar: fades in slowly and stays */
   .hero-enter::before {
     content: '';
     position: absolute;
-    top: -48px;
-    left: 50%;
+    top: -56px;
+    left: 0;
+    right: 0;
+    margin-inline: auto;
     z-index: -1;
-    width: 260px;
-    height: 260px;
+    width: 280px;
+    height: 280px;
     border-radius: 9999px;
-    background: radial-gradient(circle, rgba(138, 163, 178, 0.32), transparent 62%);
-    transform: translateX(-50%) scale(0.6);
-    opacity: 0;
-    filter: blur(16px);
-    animation: heroGlow 1.35s cubic-bezier(0.22, 1, 0.36, 1) 0.1s both;
+    background: radial-gradient(circle, rgba(196, 154, 82, 0.24), transparent 68%);
+    animation: haloFade 1.8s ease-out 0.1s both;
   }
 
   .hero-avatar-wrap {
     position: relative;
-    animation: avatarDropIn 1s cubic-bezier(0.16, 1, 0.3, 1) 0.1s both;
+    animation: avatarIn 1s var(--ease-out-soft) both;
   }
 
+  /* Thin ring that settles into place instead of pulsing outward */
   .hero-avatar-wrap::after {
     content: '';
     position: absolute;
-    inset: -8px;
+    inset: -7px;
     z-index: -1;
     border-radius: 9999px;
-    border: 1px solid rgba(138, 163, 178, 0.35);
-    opacity: 0;
-    transform: scale(0.72);
-    animation: avatarRing 1.2s cubic-bezier(0.22, 1, 0.36, 1) 0.35s both;
+    border: 1px solid rgba(196, 154, 82, 0.3);
+    animation: ringIn 1.2s var(--ease-out-soft) 0.25s both;
   }
 
   .hero-avatar {
     box-shadow:
-      0 18px 60px rgba(15, 23, 42, 0.12),
-      0 0 0 1px rgba(138, 163, 178, 0.12);
+      0 18px 60px rgba(60, 40, 30, 0.12),
+      0 0 0 1px rgba(196, 154, 82, 0.12);
   }
 
+  /* Name rises out of a mask, like a line of type being set */
   .hero-title {
-    opacity: 0;
-    letter-spacing: 0.24em;
-    transform: translate3d(0, 24px, 0) scale(0.96);
-    filter: blur(8px);
-    animation: titleReveal 0.95s cubic-bezier(0.22, 1, 0.36, 1) 0.38s both;
+    overflow: hidden;
+    padding-bottom: 0.08em;
+  }
+
+  .hero-title-inner {
+    display: inline-block;
+    animation: maskRise 1s var(--ease-out-soft) 0.2s both;
   }
 
   .hero-label-item {
-    opacity: 0;
-    transform: translate3d(0, 18px, 0) scale(0.86);
-    filter: blur(6px);
-    animation: labelPop 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+    animation: softRise 0.9s var(--ease-out-soft) both;
   }
 
   .hero-label-item:nth-child(1) {
-    animation-delay: 0.62s;
+    animation-delay: 0.42s;
   }
 
   .hero-label-item:nth-child(2) {
-    animation-delay: 0.7s;
+    animation-delay: 0.48s;
   }
 
   .hero-label-item:nth-child(3) {
-    animation-delay: 0.78s;
+    animation-delay: 0.54s;
   }
 
   .hero-label-item:nth-child(4) {
-    animation-delay: 0.86s;
+    animation-delay: 0.6s;
   }
 
   .hero-label-item:nth-child(5) {
-    animation-delay: 0.94s;
+    animation-delay: 0.66s;
+  }
+
+  /* First-screen content: pure CSS, never waits for JS */
+  .first-screen-reveal {
+    animation: softRise 1s var(--ease-out-soft) 0.7s both;
+  }
+
+  #content > :global(section:first-child) :global(h2) {
+    animation: softFade 1s ease-out 0.65s both;
   }
 
   .scroll-reveal {
     opacity: 0;
-    transform: translate3d(0, 56px, 0) scale(0.96);
-    filter: blur(10px);
+    transform: translate3d(0, 16px, 0);
     transition:
-      opacity 0.85s cubic-bezier(0.22, 1, 0.36, 1),
-      transform 0.85s cubic-bezier(0.22, 1, 0.36, 1),
-      filter 0.85s cubic-bezier(0.22, 1, 0.36, 1);
-    will-change: opacity, transform, filter;
+      opacity 0.9s var(--ease-out-soft),
+      transform 0.9s var(--ease-out-soft);
   }
 
   .scroll-reveal.is-visible {
     opacity: 1;
-    transform: translate3d(0, 0, 0) scale(1);
-    filter: blur(0);
+    transform: translate3d(0, 0, 0);
   }
 
-  .scroll-reveal-left {
-    transform: translate3d(-72px, 48px, 0) scale(0.95);
-  }
-
+  .scroll-reveal-left,
   .scroll-reveal-right {
-    transform: translate3d(72px, 48px, 0) scale(0.95);
+    transform: translate3d(0, 16px, 0);
   }
 
   .scroll-reveal-left.is-visible,
   .scroll-reveal-right.is-visible {
-    transform: translate3d(0, 0, 0) scale(1);
+    transform: translate3d(0, 0, 0);
   }
 
   .delay-1 {
-    transition-delay: 0.08s;
+    transition-delay: 0.06s;
   }
 
   .delay-2 {
-    transition-delay: 0.16s;
+    transition-delay: 0.12s;
   }
 
   .delay-3 {
-    transition-delay: 0.24s;
+    transition-delay: 0.18s;
   }
 
   .blog-section-reveal.is-visible .blog-post-reveal {
     opacity: 1;
-    transform: translate3d(0, 0, 0) scale(1);
-    filter: blur(0);
+    transform: translate3d(0, 0, 0);
   }
 
   .blog-post-reveal {
     opacity: 0;
-    transform: translate3d(0, 36px, 0) scale(0.98);
-    filter: blur(8px);
+    transform: translate3d(0, 12px, 0);
     transition:
-      opacity 0.75s cubic-bezier(0.22, 1, 0.36, 1),
-      transform 0.75s cubic-bezier(0.22, 1, 0.36, 1),
-      filter 0.75s cubic-bezier(0.22, 1, 0.36, 1);
-    will-change: opacity, transform, filter;
+      opacity 0.9s var(--ease-out-soft),
+      transform 0.9s var(--ease-out-soft);
   }
 
-  @keyframes heroFadeIn {
+  @keyframes canvasFade {
     from {
       opacity: 0;
-      transform: translate3d(0, 24px, 0);
+    }
+
+    to {
+      opacity: 0.68;
+    }
+  }
+
+  @keyframes haloFade {
+    from {
+      opacity: 0;
+    }
+
+    to {
+      opacity: 1;
+    }
+  }
+
+  @keyframes avatarIn {
+    from {
+      opacity: 0;
+      transform: scale(0.94);
+    }
+
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  @keyframes ringIn {
+    from {
+      opacity: 0;
+      transform: scale(0.9);
+    }
+
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  @keyframes maskRise {
+    from {
+      transform: translate3d(0, 105%, 0);
+    }
+
+    to {
+      transform: translate3d(0, 0, 0);
+    }
+  }
+
+  @keyframes softRise {
+    from {
+      opacity: 0;
+      transform: translate3d(0, 10px, 0);
     }
 
     to {
@@ -398,91 +459,13 @@ const allPostsByDate = sortMDByDate(allPosts).slice(0, MAX_POSTS)
     }
   }
 
-  @keyframes heroGlow {
+  @keyframes softFade {
     from {
       opacity: 0;
-      transform: translateX(-50%) scale(0.5);
-    }
-
-    45% {
-      opacity: 1;
-    }
-
-    to {
-      opacity: 0.75;
-      transform: translateX(-50%) scale(1);
-    }
-  }
-
-  @keyframes avatarDropIn {
-    from {
-      opacity: 0;
-      transform: translate3d(0, -28px, 0) scale(0.78) rotate(-4deg);
-      filter: blur(12px);
-    }
-
-    70% {
-      opacity: 1;
-      transform: translate3d(0, 4px, 0) scale(1.04) rotate(1deg);
-      filter: blur(0);
     }
 
     to {
       opacity: 1;
-      transform: translate3d(0, 0, 0) scale(1) rotate(0deg);
-      filter: blur(0);
-    }
-  }
-
-  @keyframes avatarRing {
-    from {
-      opacity: 0;
-      transform: scale(0.72);
-    }
-
-    55% {
-      opacity: 1;
-    }
-
-    to {
-      opacity: 0;
-      transform: scale(1.35);
-    }
-  }
-
-  @keyframes titleReveal {
-    from {
-      opacity: 0;
-      letter-spacing: 0.24em;
-      transform: translate3d(0, 24px, 0) scale(0.96);
-      filter: blur(8px);
-    }
-
-    to {
-      opacity: 1;
-      letter-spacing: normal;
-      transform: translate3d(0, 0, 0) scale(1);
-      filter: blur(0);
-    }
-  }
-
-  @keyframes labelPop {
-    from {
-      opacity: 0;
-      transform: translate3d(0, 18px, 0) scale(0.86);
-      filter: blur(6px);
-    }
-
-    70% {
-      opacity: 1;
-      transform: translate3d(0, -2px, 0) scale(1.06);
-      filter: blur(0);
-    }
-
-    to {
-      opacity: 1;
-      transform: translate3d(0, 0, 0) scale(1);
-      filter: blur(0);
     }
   }
 
@@ -491,6 +474,7 @@ const allPostsByDate = sortMDByDate(allPosts).slice(0, MAX_POSTS)
       display: none;
     }
 
+    .first-screen-reveal,
     .scroll-reveal,
     .scroll-reveal-left,
     .scroll-reveal-right,
@@ -501,6 +485,7 @@ const allPostsByDate = sortMDByDate(allPosts).slice(0, MAX_POSTS)
     .hero-avatar-wrap,
     .hero-avatar-wrap::after,
     .hero-title,
+    .hero-title-inner,
     .hero-label-item {
       opacity: 1;
       transform: none;
@@ -509,7 +494,8 @@ const allPostsByDate = sortMDByDate(allPosts).slice(0, MAX_POSTS)
       transition: none;
     }
   }
-  html, body {
+  html,
+  body {
     overflow-x: hidden;
     max-width: 100%;
   }

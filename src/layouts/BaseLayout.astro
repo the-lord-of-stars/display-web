@@ -13,7 +13,8 @@ interface Props {
 
 const {
   meta: { articleDate, description = config.description, ogImage, title },
-  highlightColor,
+  // Warm gold from the avatar, so every page gets the same top glow unless it sets its own
+  highlightColor = '#c49a52',
   ...props
 } = Astro.props
 ---
@@ -60,13 +61,15 @@ const {
       }
     </style>
 
-    <script src='https://unpkg.com/oh-my-live2d@latest' is:inline></script>
     <script is:inline>
-      window.addEventListener('DOMContentLoaded', () => {
-        if (window.OML2D) {
+      // Load Live2D lazily so its ~1MB bundle never blocks page rendering or DOMContentLoaded.
+      ;(() => {
+        const LIVE2D_SRC = 'https://unpkg.com/oh-my-live2d@0.19.3/dist/index.min.js'
+        const init = () => {
+          if (!window.OML2D) return
           OML2D.loadOml2d({
             dockedPosition: 'right',
-            primaryColor: '#14b8a6',
+            primaryColor: '#c49a52',
             mobileDisplay: false,
             models: [
               {
@@ -120,7 +123,22 @@ const {
             }
           })
         }
-      })
+        const inject = () => {
+          // Skip on small screens: the model is hidden there anyway (mobileDisplay: false).
+          if (window.matchMedia('(max-width: 768px)').matches) return
+          const s = document.createElement('script')
+          s.src = LIVE2D_SRC
+          s.async = true
+          s.onload = init
+          document.body.appendChild(s)
+        }
+        const schedule = () =>
+          'requestIdleCallback' in window
+            ? requestIdleCallback(inject, { timeout: 2000 })
+            : setTimeout(inject, 300)
+        if (document.readyState === 'complete') schedule()
+        else window.addEventListener('load', schedule, { once: true })
+      })()
     </script>
   </body>
 </html>
