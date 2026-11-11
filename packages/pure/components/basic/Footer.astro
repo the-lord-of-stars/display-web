@@ -75,8 +75,13 @@ const footerLink1 = footerConf.links?.filter(({ pos }) => pos === 1) || []
         }
       </div>
 
-      {/* Social Brands */}
+      {/* Social Brands (+ the reader level badge, filled in by /scripts/quest.js) */}
       <div class='flex items-center gap-x-4'>
+        <button type='button' class='quest-badge' hidden>
+          <span class='quest-level'>LV 1</span>
+          <span class='quest-title'>Visitor</span>
+          <span class='quest-gauge' aria-hidden='true'><span class='quest-fill'></span></span>
+        </button>
         {
           footerConf.social &&
             Object.entries(footerConf.social).map(([platform, { label, url }]) => (

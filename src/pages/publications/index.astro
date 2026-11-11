@@ -1,7 +1,8 @@
 ---
-import PageLayout from '@/layouts/CommonPage.astro'
 import { Collapse } from 'astro-pure/user'
-import { publications, } from './data.astro'
+import PageLayout from '@/layouts/CommonPage.astro'
+
+import { publications } from './data.astro'
 
 const headings = publications.flatMap((group) => [
   {
@@ -13,7 +14,6 @@ const headings = publications.flatMap((group) => [
 ---
 
 <PageLayout title='Publications' {headings} dust>
-
   <div class='publication-list'>
     {
       publications.map((group) => (
@@ -23,24 +23,35 @@ const headings = publications.flatMap((group) => [
           </h2>
 
           <div class='publication-items'>
-            {
-              group.items.map((pub) => (
-                <article class='publication-item'>
-                  <div class='publication-top'>
-                    <div class='publication-image pixel-frame pixel-frame-bg'>
-                      {pub.image ? (
-                        <img src={pub.image} alt={pub.title} />
-                      ) : (
-                        <div class='publication-image-placeholder'>No Image</div>
-                      )}
-                    </div>
+            {group.items.map((pub) => (
+              <article class='publication-item'>
+                <div class='publication-top'>
+                  <div class='publication-image pixel-frame pixel-frame-bg'>
+                    {pub.image ? (
+                      <img src={pub.image} alt={pub.title} />
+                    ) : (
+                      <div class='publication-image-placeholder'>No Image</div>
+                    )}
+                  </div>
 
-                    <div class='publication-meta'>
-                      <h3 id={pub.slug} class='publication-title'>
-                        {pub.title}
-                      </h3>
+                  <div class='publication-meta'>
+                    <h3 id={pub.slug} class='publication-title'>
+                      {pub.title}
+                    </h3>
 
-                      {pub.authors.length <= 4 ? (
+                    {pub.authors.length <= 4 ? (
+                      <div class='publication-authors'>
+                        {pub.authors.map((author, index) => (
+                          <>
+                            {author === 'Zefei Xie' ? <strong>{author}</strong> : author}
+                            {index < pub.authors.length - 1 ? ', ' : ''}
+                          </>
+                        ))}
+                      </div>
+                    ) : (
+                      <Collapse
+                        title={`${pub.authors.slice(0, 3).join(', ')} +${pub.authors.length - 3} more`}
+                      >
                         <div class='publication-authors'>
                           {pub.authors.map((author, index) => (
                             <>
@@ -49,63 +60,84 @@ const headings = publications.flatMap((group) => [
                             </>
                           ))}
                         </div>
-                      ) : (
-                        <Collapse
-                          title={`${pub.authors.slice(0, 3).join(', ')} +${pub.authors.length - 3} more`}
+                      </Collapse>
+                    )}
+
+                    <div class='publication-venue'>{pub.venue}</div>
+
+                    {pub.description && (
+                      <div class='publication-description'>{pub.description}</div>
+                    )}
+
+                    <div class='publication-links'>
+                      {pub.pdf && (
+                        <a
+                          class='pixel-btn'
+                          href={pub.pdf}
+                          target='_blank'
+                          rel='noopener noreferrer'
                         >
-                          <div class='publication-authors'>
-                            {pub.authors.map((author, index) => (
-                              <>
-                                {author === 'Zefei Xie' ? <strong>{author}</strong> : author}
-                                {index < pub.authors.length - 1 ? ', ' : ''}
-                              </>
-                            ))}
-                          </div>
-                        </Collapse>
+                          PDF
+                        </a>
                       )}
-
-                      <div class='publication-venue'>{pub.venue}</div>
-
-                      {pub.description && (
-                        <div class='publication-description'>{pub.description}</div>
+                      {pub.code && (
+                        <a
+                          class='pixel-btn'
+                          href={pub.code}
+                          target='_blank'
+                          rel='noopener noreferrer'
+                        >
+                          Code
+                        </a>
                       )}
-
-                      <div class='publication-links'>
-                        {pub.pdf && (
-                          <a href={pub.pdf} target='_blank' rel='noopener noreferrer'>PDF</a>
-                        )}
-                        {pub.code && (
-                          <a href={pub.code} target='_blank' rel='noopener noreferrer'>Code</a>
-                        )}
-                        {pub.doi && (
-                          <a href={pub.doi} target='_blank' rel='noopener noreferrer'>DOI</a>
-                        )}
-                        {pub.bibtex && (
-                          <a href={pub.bibtex} target='_blank' rel='noopener noreferrer'>BibTeX</a>
-                        )}
-                        {pub.online && (
-                          <a href={pub.online} target='_blank' rel='noopener noreferrer'>Online</a>
-                        )}
-                      </div>
+                      {pub.doi && (
+                        <a
+                          class='pixel-btn'
+                          href={pub.doi}
+                          target='_blank'
+                          rel='noopener noreferrer'
+                        >
+                          DOI
+                        </a>
+                      )}
+                      {pub.bibtex && (
+                        <a
+                          class='pixel-btn'
+                          href={pub.bibtex}
+                          target='_blank'
+                          rel='noopener noreferrer'
+                        >
+                          BibTeX
+                        </a>
+                      )}
+                      {pub.online && (
+                        <a
+                          class='pixel-btn'
+                          href={pub.online}
+                          target='_blank'
+                          rel='noopener noreferrer'
+                        >
+                          Online
+                        </a>
+                      )}
                     </div>
                   </div>
+                </div>
 
-                  {pub.abstract && (
-                    <div class='publication-abstract'>
-                      <Collapse title='Abstract'>
-                        <p>{pub.abstract}</p>
-                      </Collapse>
-                    </div>
-                  )}
-                </article>
-              ))
-            }
+                {pub.abstract && (
+                  <div class='publication-abstract'>
+                    <Collapse title='Abstract'>
+                      <p>{pub.abstract}</p>
+                    </Collapse>
+                  </div>
+                )}
+              </article>
+            ))}
           </div>
         </section>
       ))
     }
   </div>
-
 </PageLayout>
 
 <style>
@@ -164,22 +196,22 @@ const headings = publications.flatMap((group) => [
   }
 
   .publication-image img {
-  width: 100%;
-  height: 100%;
-  display: block;
-  object-fit: cover;
-  transform: scale(1.12);
-  transition:
-    transform 1.6s cubic-bezier(0.4, 0, 0.2, 1),
-    filter 1.6s cubic-bezier(0.4, 0, 0.2, 1);
-  will-change: transform;
-}
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: cover;
+    transform: scale(1.12);
+    transition:
+      transform 1.6s cubic-bezier(0.4, 0, 0.2, 1),
+      filter 1.6s cubic-bezier(0.4, 0, 0.2, 1);
+    will-change: transform;
+  }
 
-.publication-item:hover .publication-image img {
-  transform: scale(1);
-  object-fit: contain;
-  filter: saturate(1.05) contrast(1.02);
-}
+  .publication-item:hover .publication-image img {
+    transform: scale(1);
+    object-fit: contain;
+    filter: saturate(1.05) contrast(1.02);
+  }
 
   .publication-image::after {
     content: 'View full image';
@@ -290,26 +322,20 @@ const headings = publications.flatMap((group) => [
     margin-top: 0.85rem;
   }
 
+  /* Pixel buttons (hover lift + offset shadow come from .pixel-btn in global.css) */
   .publication-links a {
     display: inline-block;
-    padding: 0.15rem 0.55rem;
+    padding: 0.15rem 0.6rem;
     border: 1px solid hsl(var(--border));
-    border-radius: 9999px;
+    background: hsl(var(--muted) / 0.5);
     font-size: 0.82rem;
     text-decoration: none;
     color: hsl(var(--muted-foreground));
-    transition:
-      transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1),
-      color 0.22s ease,
-      border-color 0.22s ease,
-      background-color 0.22s ease;
   }
 
   .publication-links a:hover {
     color: hsl(var(--foreground));
-    border-color: hsl(var(--foreground) / 0.3);
     background: hsl(var(--muted));
-    transform: translate3d(0, -1px, 0);
   }
 
   .publication-abstract {
@@ -400,8 +426,7 @@ const headings = publications.flatMap((group) => [
   function setupPublicationScrollPercentFix() {
     const actionBtnsEl = document.getElementById('action-buttons')
     const scrollBtnEl = document.getElementById('to-top-btn')
-    const articleEl =
-      document.getElementById('main-content') || document.getElementById('content')
+    const articleEl = document.getElementById('main-content') || document.getElementById('content')
 
     if (!actionBtnsEl || !scrollBtnEl || !articleEl) return
 

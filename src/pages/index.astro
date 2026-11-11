@@ -351,11 +351,16 @@ const allPostsByDate = sortMDByDate(allPosts).slice(0, MAX_POSTS)
     }
   }
 
-  avatarWrap?.addEventListener('click', puff)
+  // Tell quest.js (Tia's reply + the "Hello there" achievement)
+  const sayHi = () => {
+    puff()
+    window.dispatchEvent(new CustomEvent('px:event', { detail: { type: 'avatar' } }))
+  }
+  avatarWrap?.addEventListener('click', sayHi)
   avatarWrap?.addEventListener('keydown', (e) => {
     if (e.key === 'Enter' || e.key === ' ') {
       e.preventDefault()
-      puff()
+      sayHi()
     }
   })
 </script>

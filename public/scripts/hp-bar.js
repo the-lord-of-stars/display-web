@@ -25,8 +25,15 @@
     const filled = Math.ceil(p * SEGMENTS) / SEGMENTS
     fill.style.transform = `scaleX(${filled})`
     bar.classList.toggle('is-visible', window.scrollY > 80)
-    bar.classList.toggle('is-full', p >= 0.999)
+    const full = p >= 0.999
+    bar.classList.toggle('is-full', full)
+    // First time the gauge fills on this page: the post counts as read (quest.js)
+    if (full && !finished && window.scrollY > 80) {
+      finished = true
+      window.dispatchEvent(new CustomEvent('px:event', { detail: { type: 'read' } }))
+    }
   }
+  let finished = false
   const onScroll = () => {
     if (!ticking) {
       ticking = true

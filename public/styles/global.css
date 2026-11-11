@@ -166,11 +166,7 @@ footer {
 .prose hr,
 hr {
   border: 0;
-  background-image: repeating-linear-gradient(
-    90deg,
-    hsl(var(--border)) 0 4px,
-    transparent 4px 8px
-  );
+  background-image: repeating-linear-gradient(90deg, hsl(var(--border)) 0 4px, transparent 4px 8px);
   background-size: 100% 2px;
   background-repeat: no-repeat;
   background-position: top left;
@@ -245,6 +241,59 @@ hr {
   .hp-bar-fill {
     transition: none;
   }
+}
+
+/* Footer reader badge: "LV 3 Reader" + a 6-segment EXP gauge (see /scripts/quest.js) */
+.quest-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.1rem 0.45rem;
+  border: 1px solid hsl(var(--border));
+  background: hsl(var(--muted) / 0.4);
+  color: hsl(var(--muted-foreground));
+  font-size: 0.85rem;
+  line-height: 1.2;
+  transition:
+    color 0.2s ease,
+    border-color 0.2s ease;
+}
+.quest-badge[hidden] {
+  display: none;
+}
+.quest-badge:hover {
+  color: hsl(var(--foreground));
+  border-color: hsl(var(--primary) / 0.6);
+}
+.quest-level {
+  color: hsl(var(--primary));
+}
+.quest-gauge {
+  position: relative;
+  width: 36px;
+  height: 5px;
+  -webkit-mask-image: repeating-linear-gradient(90deg, #000 0 5px, transparent 5px 6px);
+  mask-image: repeating-linear-gradient(90deg, #000 0 5px, transparent 5px 6px);
+  background-color: hsl(var(--primary) / 0.18);
+}
+.quest-fill {
+  position: absolute;
+  inset: 0;
+  background-color: hsl(var(--primary));
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.3s steps(3, end);
+}
+
+/* Mosaic image loading: the canvas sits over the <img> while it sharpens */
+.mosaic-canvas {
+  position: absolute;
+  pointer-events: none;
+  image-rendering: pixelated;
+  z-index: 1;
+}
+img.is-mosaicking {
+  opacity: 0 !important;
 }
 
 /* Pixel page transition (see /scripts/pixel-transition.js) */
@@ -476,29 +525,21 @@ a.pixel-frame:hover,
   border-radius: 0 !important;
 }
 
-/* Article links: dotted pixel underline; on hover a solid line fills in, step by step */
+/* Article links: a calm, solid lamp-gold underline that firms up on hover.
+ * (A dashed line looked jittery on small text, so links stay solid.) */
 .prose a:not(.not-prose a):not(.pixel-btn):not(:has(img)) {
-  text-decoration: none;
-  padding-bottom: 2px;
-  background-image:
-    linear-gradient(currentColor, currentColor),
-    repeating-linear-gradient(90deg, currentColor 0 2px, transparent 2px 4px);
-  background-size:
-    0% 2px,
-    100% 2px;
-  background-position:
-    left bottom,
-    left bottom;
-  background-repeat: no-repeat;
+  text-decoration-line: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.25em;
+  text-decoration-color: hsl(var(--primary) / 0.45);
   transition:
-    background-size 0.3s steps(6, end),
-    color 0.2s ease;
+    color 0.2s ease,
+    text-decoration-color 0.2s ease;
 }
 .prose a:not(.not-prose a):not(.pixel-btn):not(:has(img)):hover {
   color: hsl(var(--primary));
-  background-size:
-    100% 2px,
-    100% 2px;
+  text-decoration-color: currentColor;
+  text-decoration-thickness: 2px;
 }
 
 /* Code blocks: a pixel window title bar with three square "buttons" */
@@ -513,11 +554,7 @@ a.pixel-frame:hover,
   inset: 0 0 auto 0;
   height: 2rem;
   background-color: hsl(var(--foreground) / 0.04);
-  background-image: repeating-linear-gradient(
-    90deg,
-    hsl(var(--border)) 0 4px,
-    transparent 4px 8px
-  );
+  background-image: repeating-linear-gradient(90deg, hsl(var(--border)) 0 4px, transparent 4px 8px);
   background-size: 100% 2px;
   background-position: left bottom;
   background-repeat: no-repeat;
@@ -563,7 +600,10 @@ a.pixel-frame:hover,
 @media (pointer: fine) {
   html,
   .cursor-default {
-    cursor: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='11'%20height='17'%20viewBox='0%200%2011%2017'%20shape-rendering='crispEdges'%3E%3Crect%20x='0'%20y='0'%20width='1'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='0'%20y='1'%20width='2'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='0'%20y='2'%20width='1'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='1'%20y='2'%20width='1'%20height='1'%20fill='%23fbf9f4'/%3E%3Crect%20x='2'%20y='2'%20width='1'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='0'%20y='3'%20width='1'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='1'%20y='3'%20width='2'%20height='1'%20fill='%23fbf9f4'/%3E%3Crect%20x='3'%20y='3'%20width='1'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='0'%20y='4'%20width='1'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='1'%20y='4'%20width='3'%20height='1'%20fill='%23fbf9f4'/%3E%3Crect%20x='4'%20y='4'%20width='1'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='0'%20y='5'%20width='1'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='1'%20y='5'%20width='4'%20height='1'%20fill='%23fbf9f4'/%3E%3Crect%20x='5'%20y='5'%20width='1'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='0'%20y='6'%20width='1'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='1'%20y='6'%20width='5'%20height='1'%20fill='%23fbf9f4'/%3E%3Crect%20x='6'%20y='6'%20width='1'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='0'%20y='7'%20width='1'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='1'%20y='7'%20width='6'%20height='1'%20fill='%23fbf9f4'/%3E%3Crect%20x='7'%20y='7'%20width='1'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='0'%20y='8'%20width='1'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='1'%20y='8'%20width='7'%20height='1'%20fill='%23fbf9f4'/%3E%3Crect%20x='8'%20y='8'%20width='1'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='0'%20y='9'%20width='1'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='1'%20y='9'%20width='8'%20height='1'%20fill='%23fbf9f4'/%3E%3Crect%20x='9'%20y='9'%20width='1'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='0'%20y='10'%20width='1'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='1'%20y='10'%20width='5'%20height='1'%20fill='%23fbf9f4'/%3E%3Crect%20x='6'%20y='10'%20width='5'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='0'%20y='11'%20width='1'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='1'%20y='11'%20width='2'%20height='1'%20fill='%23fbf9f4'/%3E%3Crect%20x='3'%20y='11'%20width='1'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='4'%20y='11'%20width='2'%20height='1'%20fill='%23fbf9f4'/%3E%3Crect%20x='6'%20y='11'%20width='1'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='0'%20y='12'%20width='1'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='1'%20y='12'%20width='1'%20height='1'%20fill='%23fbf9f4'/%3E%3Crect%20x='2'%20y='12'%20width='1'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='4'%20y='12'%20width='1'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='5'%20y='12'%20width='2'%20height='1'%20fill='%23fbf9f4'/%3E%3Crect%20x='7'%20y='12'%20width='1'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='0'%20y='13'%20width='2'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='4'%20y='13'%20width='1'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='5'%20y='13'%20width='2'%20height='1'%20fill='%23fbf9f4'/%3E%3Crect%20x='7'%20y='13'%20width='1'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='0'%20y='14'%20width='1'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='5'%20y='14'%20width='1'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='6'%20y='14'%20width='2'%20height='1'%20fill='%23fbf9f4'/%3E%3Crect%20x='8'%20y='14'%20width='1'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='5'%20y='15'%20width='1'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='6'%20y='15'%20width='2'%20height='1'%20fill='%23fbf9f4'/%3E%3Crect%20x='8'%20y='15'%20width='1'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='6'%20y='16'%20width='2'%20height='1'%20fill='%232b201b'/%3E%3C/svg%3E") 0 0, auto !important;
+    cursor:
+      url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='11'%20height='17'%20viewBox='0%200%2011%2017'%20shape-rendering='crispEdges'%3E%3Crect%20x='0'%20y='0'%20width='1'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='0'%20y='1'%20width='2'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='0'%20y='2'%20width='1'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='1'%20y='2'%20width='1'%20height='1'%20fill='%23fbf9f4'/%3E%3Crect%20x='2'%20y='2'%20width='1'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='0'%20y='3'%20width='1'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='1'%20y='3'%20width='2'%20height='1'%20fill='%23fbf9f4'/%3E%3Crect%20x='3'%20y='3'%20width='1'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='0'%20y='4'%20width='1'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='1'%20y='4'%20width='3'%20height='1'%20fill='%23fbf9f4'/%3E%3Crect%20x='4'%20y='4'%20width='1'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='0'%20y='5'%20width='1'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='1'%20y='5'%20width='4'%20height='1'%20fill='%23fbf9f4'/%3E%3Crect%20x='5'%20y='5'%20width='1'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='0'%20y='6'%20width='1'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='1'%20y='6'%20width='5'%20height='1'%20fill='%23fbf9f4'/%3E%3Crect%20x='6'%20y='6'%20width='1'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='0'%20y='7'%20width='1'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='1'%20y='7'%20width='6'%20height='1'%20fill='%23fbf9f4'/%3E%3Crect%20x='7'%20y='7'%20width='1'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='0'%20y='8'%20width='1'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='1'%20y='8'%20width='7'%20height='1'%20fill='%23fbf9f4'/%3E%3Crect%20x='8'%20y='8'%20width='1'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='0'%20y='9'%20width='1'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='1'%20y='9'%20width='8'%20height='1'%20fill='%23fbf9f4'/%3E%3Crect%20x='9'%20y='9'%20width='1'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='0'%20y='10'%20width='1'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='1'%20y='10'%20width='5'%20height='1'%20fill='%23fbf9f4'/%3E%3Crect%20x='6'%20y='10'%20width='5'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='0'%20y='11'%20width='1'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='1'%20y='11'%20width='2'%20height='1'%20fill='%23fbf9f4'/%3E%3Crect%20x='3'%20y='11'%20width='1'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='4'%20y='11'%20width='2'%20height='1'%20fill='%23fbf9f4'/%3E%3Crect%20x='6'%20y='11'%20width='1'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='0'%20y='12'%20width='1'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='1'%20y='12'%20width='1'%20height='1'%20fill='%23fbf9f4'/%3E%3Crect%20x='2'%20y='12'%20width='1'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='4'%20y='12'%20width='1'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='5'%20y='12'%20width='2'%20height='1'%20fill='%23fbf9f4'/%3E%3Crect%20x='7'%20y='12'%20width='1'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='0'%20y='13'%20width='2'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='4'%20y='13'%20width='1'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='5'%20y='13'%20width='2'%20height='1'%20fill='%23fbf9f4'/%3E%3Crect%20x='7'%20y='13'%20width='1'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='0'%20y='14'%20width='1'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='5'%20y='14'%20width='1'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='6'%20y='14'%20width='2'%20height='1'%20fill='%23fbf9f4'/%3E%3Crect%20x='8'%20y='14'%20width='1'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='5'%20y='15'%20width='1'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='6'%20y='15'%20width='2'%20height='1'%20fill='%23fbf9f4'/%3E%3Crect%20x='8'%20y='15'%20width='1'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='6'%20y='16'%20width='2'%20height='1'%20fill='%232b201b'/%3E%3C/svg%3E")
+        0 0,
+      auto !important;
   }
   a[href],
   button:not(:disabled, .cursor-default),
@@ -575,7 +615,10 @@ a.pixel-frame:hover,
   #oml2d-menus *,
   #oml2d-statusBar,
   #oml2d-statusBar * {
-    cursor: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='14'%20height='16'%20viewBox='0%200%2014%2016'%20shape-rendering='crispEdges'%3E%3Crect%20x='4'%20y='0'%20width='2'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='3'%20y='1'%20width='1'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='4'%20y='1'%20width='2'%20height='1'%20fill='%23fbf9f4'/%3E%3Crect%20x='6'%20y='1'%20width='1'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='3'%20y='2'%20width='1'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='4'%20y='2'%20width='2'%20height='1'%20fill='%23fbf9f4'/%3E%3Crect%20x='6'%20y='2'%20width='1'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='3'%20y='3'%20width='1'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='4'%20y='3'%20width='2'%20height='1'%20fill='%23fbf9f4'/%3E%3Crect%20x='6'%20y='3'%20width='1'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='3'%20y='4'%20width='1'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='4'%20y='4'%20width='2'%20height='1'%20fill='%23fbf9f4'/%3E%3Crect%20x='6'%20y='4'%20width='5'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='3'%20y='5'%20width='1'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='4'%20y='5'%20width='2'%20height='1'%20fill='%23fbf9f4'/%3E%3Crect%20x='6'%20y='5'%20width='1'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='7'%20y='5'%20width='2'%20height='1'%20fill='%23fbf9f4'/%3E%3Crect%20x='9'%20y='5'%20width='1'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='10'%20y='5'%20width='1'%20height='1'%20fill='%23fbf9f4'/%3E%3Crect%20x='11'%20y='5'%20width='2'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='0'%20y='6'%20width='2'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='3'%20y='6'%20width='1'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='4'%20y='6'%20width='2'%20height='1'%20fill='%23fbf9f4'/%3E%3Crect%20x='6'%20y='6'%20width='1'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='7'%20y='6'%20width='2'%20height='1'%20fill='%23fbf9f4'/%3E%3Crect%20x='9'%20y='6'%20width='1'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='10'%20y='6'%20width='1'%20height='1'%20fill='%23fbf9f4'/%3E%3Crect%20x='11'%20y='6'%20width='1'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='12'%20y='6'%20width='1'%20height='1'%20fill='%23fbf9f4'/%3E%3Crect%20x='13'%20y='6'%20width='1'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='0'%20y='7'%20width='1'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='1'%20y='7'%20width='1'%20height='1'%20fill='%23fbf9f4'/%3E%3Crect%20x='2'%20y='7'%20width='2'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='4'%20y='7'%20width='9'%20height='1'%20fill='%23fbf9f4'/%3E%3Crect%20x='13'%20y='7'%20width='1'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='0'%20y='8'%20width='1'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='1'%20y='8'%20width='2'%20height='1'%20fill='%23fbf9f4'/%3E%3Crect%20x='3'%20y='8'%20width='1'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='4'%20y='8'%20width='9'%20height='1'%20fill='%23fbf9f4'/%3E%3Crect%20x='13'%20y='8'%20width='1'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='1'%20y='9'%20width='1'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='2'%20y='9'%20width='11'%20height='1'%20fill='%23fbf9f4'/%3E%3Crect%20x='13'%20y='9'%20width='1'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='2'%20y='10'%20width='1'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='3'%20y='10'%20width='10'%20height='1'%20fill='%23fbf9f4'/%3E%3Crect%20x='13'%20y='10'%20width='1'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='2'%20y='11'%20width='1'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='3'%20y='11'%20width='9'%20height='1'%20fill='%23fbf9f4'/%3E%3Crect%20x='12'%20y='11'%20width='1'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='3'%20y='12'%20width='1'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='4'%20y='12'%20width='8'%20height='1'%20fill='%23fbf9f4'/%3E%3Crect%20x='12'%20y='12'%20width='1'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='4'%20y='13'%20width='1'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='5'%20y='13'%20width='6'%20height='1'%20fill='%23fbf9f4'/%3E%3Crect%20x='11'%20y='13'%20width='1'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='4'%20y='14'%20width='1'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='5'%20y='14'%20width='6'%20height='1'%20fill='%23fbf9f4'/%3E%3Crect%20x='11'%20y='14'%20width='1'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='4'%20y='15'%20width='8'%20height='1'%20fill='%232b201b'/%3E%3C/svg%3E") 4 0, pointer !important;
+    cursor:
+      url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='14'%20height='16'%20viewBox='0%200%2014%2016'%20shape-rendering='crispEdges'%3E%3Crect%20x='4'%20y='0'%20width='2'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='3'%20y='1'%20width='1'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='4'%20y='1'%20width='2'%20height='1'%20fill='%23fbf9f4'/%3E%3Crect%20x='6'%20y='1'%20width='1'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='3'%20y='2'%20width='1'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='4'%20y='2'%20width='2'%20height='1'%20fill='%23fbf9f4'/%3E%3Crect%20x='6'%20y='2'%20width='1'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='3'%20y='3'%20width='1'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='4'%20y='3'%20width='2'%20height='1'%20fill='%23fbf9f4'/%3E%3Crect%20x='6'%20y='3'%20width='1'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='3'%20y='4'%20width='1'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='4'%20y='4'%20width='2'%20height='1'%20fill='%23fbf9f4'/%3E%3Crect%20x='6'%20y='4'%20width='5'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='3'%20y='5'%20width='1'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='4'%20y='5'%20width='2'%20height='1'%20fill='%23fbf9f4'/%3E%3Crect%20x='6'%20y='5'%20width='1'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='7'%20y='5'%20width='2'%20height='1'%20fill='%23fbf9f4'/%3E%3Crect%20x='9'%20y='5'%20width='1'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='10'%20y='5'%20width='1'%20height='1'%20fill='%23fbf9f4'/%3E%3Crect%20x='11'%20y='5'%20width='2'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='0'%20y='6'%20width='2'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='3'%20y='6'%20width='1'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='4'%20y='6'%20width='2'%20height='1'%20fill='%23fbf9f4'/%3E%3Crect%20x='6'%20y='6'%20width='1'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='7'%20y='6'%20width='2'%20height='1'%20fill='%23fbf9f4'/%3E%3Crect%20x='9'%20y='6'%20width='1'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='10'%20y='6'%20width='1'%20height='1'%20fill='%23fbf9f4'/%3E%3Crect%20x='11'%20y='6'%20width='1'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='12'%20y='6'%20width='1'%20height='1'%20fill='%23fbf9f4'/%3E%3Crect%20x='13'%20y='6'%20width='1'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='0'%20y='7'%20width='1'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='1'%20y='7'%20width='1'%20height='1'%20fill='%23fbf9f4'/%3E%3Crect%20x='2'%20y='7'%20width='2'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='4'%20y='7'%20width='9'%20height='1'%20fill='%23fbf9f4'/%3E%3Crect%20x='13'%20y='7'%20width='1'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='0'%20y='8'%20width='1'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='1'%20y='8'%20width='2'%20height='1'%20fill='%23fbf9f4'/%3E%3Crect%20x='3'%20y='8'%20width='1'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='4'%20y='8'%20width='9'%20height='1'%20fill='%23fbf9f4'/%3E%3Crect%20x='13'%20y='8'%20width='1'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='1'%20y='9'%20width='1'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='2'%20y='9'%20width='11'%20height='1'%20fill='%23fbf9f4'/%3E%3Crect%20x='13'%20y='9'%20width='1'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='2'%20y='10'%20width='1'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='3'%20y='10'%20width='10'%20height='1'%20fill='%23fbf9f4'/%3E%3Crect%20x='13'%20y='10'%20width='1'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='2'%20y='11'%20width='1'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='3'%20y='11'%20width='9'%20height='1'%20fill='%23fbf9f4'/%3E%3Crect%20x='12'%20y='11'%20width='1'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='3'%20y='12'%20width='1'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='4'%20y='12'%20width='8'%20height='1'%20fill='%23fbf9f4'/%3E%3Crect%20x='12'%20y='12'%20width='1'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='4'%20y='13'%20width='1'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='5'%20y='13'%20width='6'%20height='1'%20fill='%23fbf9f4'/%3E%3Crect%20x='11'%20y='13'%20width='1'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='4'%20y='14'%20width='1'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='5'%20y='14'%20width='6'%20height='1'%20fill='%23fbf9f4'/%3E%3Crect%20x='11'%20y='14'%20width='1'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='4'%20y='15'%20width='8'%20height='1'%20fill='%232b201b'/%3E%3C/svg%3E")
+        4 0,
+      pointer !important;
   }
   input:not([type='button'], [type='submit'], [type='checkbox'], [type='radio']),
   textarea,

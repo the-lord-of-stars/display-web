@@ -100,6 +100,11 @@ const {
       <Footer />
     </div>
 
+    {/* Reader EXP, levels, achievements and Tia's reactions */}
+    <script is:inline src='/scripts/quest.js' defer></script>
+    {/* Images sharpen from a pixel mosaic as they load */}
+    <script is:inline src='/scripts/mosaic-images.js' defer></script>
+
     <style define:vars={{ highlightColor }}>
       :global(.highlight) {
         color: var(--highlightColor, hsl(var(--primary) / var(--un-text-opacity))) !important;
@@ -119,7 +124,8 @@ const {
         const LIVE2D_SRC = 'https://unpkg.com/oh-my-live2d@0.19.3/dist/index.min.js'
         const init = () => {
           if (!window.OML2D) return
-          OML2D.loadOml2d({
+          // Expose Tia so quest.js can make her react to what happens on the site
+          const tia = OML2D.loadOml2d({
             dockedPosition: 'right',
             primaryColor: '#c49a52',
             mobileDisplay: false,
@@ -209,6 +215,14 @@ const {
               ]
             }
           })
+          const ready = () => {
+            if (window.__tia) return
+            window.__tia = tia
+            window.dispatchEvent(new Event('tia:ready'))
+          }
+          if (tia && typeof tia.onLoad === 'function')
+            tia.onLoad((status) => status === 'success' && ready())
+          else ready()
         }
         const inject = () => {
           // Skip on small screens: the model is hidden there anyway (mobileDisplay: false).
