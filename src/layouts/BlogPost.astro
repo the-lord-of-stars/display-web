@@ -48,6 +48,7 @@ const primaryColor = data.heroImage?.color ?? 'hsl(var(--primary) / var(--un-tex
   meta={{ articleDate, description, ogImage: socialImage, title }}
   highlightColor={primaryColor}
   back='/blog'
+  progress
 >
   {!!headings.length && <TOC {headings} slot='sidebar' />}
 

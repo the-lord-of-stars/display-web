@@ -2,6 +2,48 @@
 import config from 'virtual:config'
 
 import { Icon } from '../user'
+
+// Pixel desk lamp for the theme toggle, drawn on a 12x12 grid.
+// '#' body, '*' lit bulb, 'o' unlit bulb, '+' light rays.
+const lampBody = ['............', '.....##.....', '....####....', '...######...', '..########..']
+const lampFoot = ['.....##.....', '.....##.....', '...######...', '..########..']
+const lamps = {
+  // On: bulb lit, full rays
+  light: [
+    ...lampBody,
+    '.....**.....',
+    '..+..##..+..',
+    '.+...##...+.',
+    '+....##....+',
+    ...lampFoot.slice(1)
+  ],
+  // Off: bulb dark, no rays
+  dark: [
+    ...lampBody,
+    '.....oo.....',
+    '.....##.....',
+    '.....##.....',
+    '.....##.....',
+    ...lampFoot.slice(1)
+  ],
+  // System/auto: bulb lit, short rays
+  system: [
+    ...lampBody,
+    '.....**.....',
+    '..+..##..+..',
+    '.....##.....',
+    '.....##.....',
+    ...lampFoot.slice(1)
+  ]
+}
+const toRects = (rows: string[]) =>
+  rows.flatMap((row, y) => [...row].flatMap((ch, x) => (ch === '.' ? [] : [{ x, y, kind: ch }])))
+const lampClass: Record<string, string> = {
+  '#': 'lamp-body',
+  '*': 'lamp-bulb',
+  o: 'lamp-off',
+  '+': 'lamp-ray'
+}
 ---
 
 <header-component
@@ -48,9 +90,20 @@ import { Icon } from '../user'
         class='group/dark box-content size-5 rounded-md border p-1.5 transition-colors hover:bg-border sm:group-[.not-top]:rounded-xl'
       >
         <span class='sr-only'>Dark Theme</span>
-        <Icon class='system size-5 group-hover/dark:text-primary' name='computer' />
-        <Icon class='light hidden size-5 group-hover/dark:text-primary' name='sun' />
-        <Icon class='dark hidden size-5 group-hover/dark:text-primary' name='moon' />
+        {
+          (['system', 'light', 'dark'] as const).map((mode) => (
+            <svg
+              class:list={[mode, 'pixel-lamp size-5', mode !== 'system' && 'hidden']}
+              viewBox='0 0 12 12'
+              shape-rendering='crispEdges'
+              aria-hidden='true'
+            >
+              {toRects(lamps[mode]).map((p) => (
+                <rect x={p.x} y={p.y} width='1' height='1' class={lampClass[p.kind]} />
+              ))}
+            </svg>
+          ))
+        }
       </button>
       <button
         id='toggleMenu'
@@ -187,6 +240,30 @@ import { Icon } from '../user'
       opacity: 1;
       background-color: hsl(var(--muted) / var(--un-bg-opacity, 1));
       border-bottom-color: hsl(var(--border) / var(--un-border-opacity, 1));
+    }
+  }
+
+  /* Pixel lamp toggle */
+  .pixel-lamp .lamp-body {
+    fill: currentColor;
+  }
+  .pixel-lamp .lamp-off {
+    fill: currentColor;
+    opacity: 0.3;
+  }
+  .pixel-lamp .lamp-bulb,
+  .pixel-lamp .lamp-ray {
+    fill: #e0ad4f;
+  }
+  #toggleDarkMode:hover .pixel-lamp .lamp-body {
+    fill: hsl(var(--primary));
+  }
+  #toggleDarkMode:hover .pixel-lamp .lamp-ray {
+    animation: lamp-ray-flicker 0.7s steps(2, end) infinite;
+  }
+  @keyframes lamp-ray-flicker {
+    50% {
+      opacity: 0.25;
     }
   }
 

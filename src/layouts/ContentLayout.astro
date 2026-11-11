@@ -10,6 +10,9 @@ interface Props {
   meta: SiteMeta
   highlightColor?: string
   back?: string
+  /** Lamplight dust background, see BaseLayout */
+  dust?: boolean | string
+  progress?: boolean
 }
 
 const { meta, highlightColor, back = '/', ...props } = Astro.props

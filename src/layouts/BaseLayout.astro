@@ -5,16 +5,27 @@ import BaseHead from '@/components/BaseHead.astro'
 import config from '@/site-config'
 
 import '@/assets/styles/app.css'
+// Pixel font for small accents (status line, 404, progress bar, 8-bit mode)
+import '@fontsource/silkscreen/latin-400.css'
 
 interface Props {
   meta: SiteMeta
   highlightColor?: string
+  /**
+   * Lamplight dust background. `true` puts the lamp at the top centre of the page;
+   * a CSS selector puts it behind that element instead (e.g. the homepage avatar).
+   */
+  dust?: boolean | string
+  /** Segmented "HP bar" reading progress at the top, tracking #content */
+  progress?: boolean
 }
 
 const {
   meta: { articleDate, description = config.description, ogImage, title },
   // Warm gold from the avatar, so every page gets the same top glow unless it sets its own
   highlightColor = '#c49a52',
+  dust,
+  progress,
   ...props
 } = Astro.props
 ---
@@ -23,6 +34,17 @@ const {
   <head>
     <BaseHead {articleDate} {description} {ogImage} {title} />
     <ThemeProvider />
+    {/* Pixel page transition: cover the page before first paint if we arrived via one */}
+    <script is:inline>
+      try {
+        if (
+          sessionStorage.getItem('px-nav') === '1' &&
+          !window.matchMedia('(prefers-reduced-motion: reduce)').matches
+        )
+          document.documentElement.classList.add('px-entering')
+      } catch (e) {}
+    </script>
+    <script is:inline src='/scripts/pixel-transition.js' defer></script>
   </head>
 
   <body class='flex justify-center bg-background text-foreground' {...props}>
@@ -33,6 +55,34 @@ const {
           class='pointer-events-none absolute start-0 top-0 z-0 h-screen w-full opacity-25'
           style={`background-image:linear-gradient(${highlightColor},transparent)`}
         />
+      )
+    }
+
+    {
+      dust && (
+        <>
+          <canvas
+            id='lamp-dust'
+            class='lamp-dust'
+            aria-hidden='true'
+            data-lamp={typeof dust === 'string' ? dust : undefined}
+          />
+          <script is:inline src='/scripts/lamp-dust.js' defer />
+        </>
+      )
+    }
+
+    {
+      progress && (
+        <>
+          <div class='hp-bar' aria-hidden='true'>
+            <span class='hp-bar-label pixel-font'>EXP</span>
+            <span class='hp-bar-track'>
+              <span class='hp-bar-fill' />
+            </span>
+          </div>
+          <script is:inline src='/scripts/hp-bar.js' defer />
+        </>
       )
     }
 

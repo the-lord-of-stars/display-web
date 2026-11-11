@@ -18,17 +18,18 @@ const backend = ['SQL', 'Milvus', 'Chroma']
 const libraries = ['LangChain', 'Scikit-learn', 'Numpy', 'NLTK', 'LangGraph']
 const framework = ['Vercel', 'Waline', 'Hexo', 'Quarto', 'Flask', 'Gradio', 'FastAPI']
 
+// Typed out one after another under the name
+const statusLines = ['MSc @ Carnegie Mellon University', 'Exploring Human-AI interaction']
+
 const MAX_POSTS = 2
 const allPosts = await getBlogCollection()
 const allPostsByDate = sortMDByDate(allPosts).slice(0, MAX_POSTS)
 ---
 
-<PageLayout meta={{ title: 'Home' }} highlightColor='#c49a52'>
-  <canvas id='home-ai-canvas' class='home-ai-canvas' aria-hidden='true'></canvas>
-
+<PageLayout meta={{ title: 'Home' }} highlightColor='#c49a52' dust='.hero-avatar'>
   <main class='relative z-10 flex w-full flex-col items-center'>
     <section class='hero-enter mb-10 flex flex-col items-center gap-y-7' id='content-header'>
-      <div class='hero-avatar-wrap'>
+      <div class='hero-avatar-wrap' role='button' tabindex='0' aria-label='Say hi'>
         <Image
           src={avatar}
           alt='profile'
@@ -41,6 +42,20 @@ const allPostsByDate = sortMDByDate(allPosts).slice(0, MAX_POSTS)
         <h1 class='hero-title text-3xl font-bold'>
           <span class='hero-title-inner'>{config.author}</span>
         </h1>
+
+        <p class='hero-status' data-lines={JSON.stringify(statusLines)}>
+          <span class='sr-only'>{statusLines.join('. ')}</span>
+          <span class='hero-status-stack' aria-hidden='true'>
+            {
+              /* Invisible ghosts reserve the width of the longest line so typing never shifts layout */
+            }
+            {statusLines.map((line) => <span class='hero-status-ghost'>{line}</span>)}
+            <span class='hero-status-live'>
+              <span class='hero-status-text'>{statusLines[0]}</span><span class='hero-status-caret'
+              ></span>
+            </span>
+          </span>
+        </p>
 
         <div class='hero-labels flex flex-wrap justify-center gap-x-7 gap-y-3'>
           <div class='hero-label-item'>
@@ -233,7 +248,119 @@ const allPostsByDate = sortMDByDate(allPosts).slice(0, MAX_POSTS)
   </main>
 </PageLayout>
 
-<script src='/scripts/home-ai-canvas.js' defer></script>
+<script src='/scripts/home-reveal.js' defer></script>
+
+<script>
+  // Typewriter for the status line under the name.
+  const status = document.querySelector<HTMLElement>('.hero-status')
+  const textEl = status?.querySelector<HTMLElement>('.hero-status-text')
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+
+  if (status && textEl && !reduceMotion) {
+    const lines: string[] = JSON.parse(status.dataset.lines || '[]')
+    const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms))
+    let index = 0
+
+    const type = async (line: string) => {
+      for (let i = 1; i <= line.length; i++) {
+        textEl.textContent = line.slice(0, i)
+        await sleep(42 + Math.random() * 40)
+      }
+    }
+    const erase = async () => {
+      const line = textEl.textContent || ''
+      for (let i = line.length - 1; i >= 0; i--) {
+        textEl.textContent = line.slice(0, i)
+        await sleep(22)
+      }
+    }
+
+    const loop = async () => {
+      textEl.textContent = ''
+      await sleep(650) // let the name finish rising first
+      while (true) {
+        status.classList.add('is-typing')
+        await type(lines[index])
+        status.classList.remove('is-typing')
+        await sleep(2600)
+        status.classList.add('is-typing')
+        await erase()
+        await sleep(350)
+        index = (index + 1) % lines.length
+      }
+    }
+
+    loop()
+  }
+
+  // Click (or Enter/Space on) the avatar: pixel hearts and steam rise from her cup.
+  const avatarWrap = document.querySelector<HTMLElement>('.hero-avatar-wrap')
+  const HEART = ['.##.##.', '#######', '#######', '.#####.', '..###..', '...#...']
+  // One element per sprite: a 1px dot whose box-shadow paints the other pixels.
+  // A dark outline is added around the shape so it reads on top of the portrait.
+  const spriteShadow = (rows: string[], px: number, outline: string) => {
+    const on = (x: number, y: number) => rows[y]?.[x] === '#'
+    const shadows: string[] = []
+    for (let y = -1; y <= rows.length; y++) {
+      for (let x = -1; x <= rows[0].length; x++) {
+        if (on(x, y)) {
+          shadows.push(`${x * px}px ${y * px}px 0 0 currentColor`)
+        } else if (on(x - 1, y) || on(x + 1, y) || on(x, y - 1) || on(x, y + 1)) {
+          shadows.push(`${x * px}px ${y * px}px 0 0 ${outline}`)
+        }
+      }
+    }
+    return shadows.join(',')
+  }
+  const heartShadow = spriteShadow(HEART, 3, 'rgba(70, 40, 30, 0.85)')
+
+  const puff = () => {
+    if (!avatarWrap || reduceMotion) return
+    const count = 7
+    for (let i = 0; i < count; i++) {
+      const isHeart = i % 3 !== 2
+      const el = document.createElement('span')
+      el.className = 'avatar-particle'
+      el.style.color = isHeart ? (i % 2 ? '#ff7f9e' : '#ffb3c4') : 'rgba(255, 250, 240, 0.95)'
+      if (isHeart) {
+        el.style.boxShadow = heartShadow
+      } else {
+        const size = 4 + Math.round(Math.random() * 2)
+        el.style.width = el.style.height = `${size}px`
+        el.style.background = 'currentColor'
+        el.style.boxShadow = '0 0 0 1px rgba(70, 40, 30, 0.5)'
+      }
+      // Start around the cup (lower middle of the portrait)
+      el.style.left = `${40 + Math.random() * 14}%`
+      el.style.top = `${74 + Math.random() * 6}%`
+      avatarWrap.appendChild(el)
+
+      const drift = (Math.random() - 0.5) * 50
+      const rise = 90 + Math.random() * 60
+      el.animate(
+        [
+          { transform: 'translate(0, 0)', opacity: 0 },
+          { opacity: 1, offset: 0.15 },
+          { transform: `translate(${drift}px, ${-rise}px)`, opacity: 0 }
+        ],
+        {
+          duration: 1100 + Math.random() * 500,
+          delay: i * 70,
+          easing: 'steps(12, end)',
+          fill: 'both'
+        }
+      ).onfinish = () => el.remove()
+    }
+  }
+
+  avatarWrap?.addEventListener('click', puff)
+  avatarWrap?.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault()
+      puff()
+    }
+  })
+</script>
 
 <style>
   /*
@@ -242,20 +369,6 @@ const allPostsByDate = sortMDByDate(allPosts).slice(0, MAX_POSTS)
    */
   :root {
     --ease-out-soft: cubic-bezier(0.16, 1, 0.3, 1);
-  }
-
-  .home-ai-canvas {
-    inset: 0;
-    z-index: 0;
-    display: block;
-    width: 100vw;
-    height: 100vh;
-    position: fixed;
-    top: 0;
-    left: 0;
-    pointer-events: none;
-    opacity: 0.68;
-    animation: canvasFade 1.6s ease-out both;
   }
 
   .hero-enter {
@@ -282,6 +395,23 @@ const allPostsByDate = sortMDByDate(allPosts).slice(0, MAX_POSTS)
   .hero-avatar-wrap {
     position: relative;
     animation: avatarIn 1s var(--ease-out-soft) both;
+  }
+
+  .hero-avatar-wrap {
+    cursor: pointer;
+    border-radius: 9999px;
+  }
+
+  .hero-avatar-wrap:active :global(.hero-avatar) {
+    transform: translate(1px, 1px);
+  }
+
+  .hero-avatar-wrap :global(.avatar-particle) {
+    position: absolute;
+    z-index: 2;
+    width: 3px;
+    height: 3px;
+    pointer-events: none;
   }
 
   /* Thin ring that settles into place instead of pulsing outward */
@@ -312,37 +442,151 @@ const allPostsByDate = sortMDByDate(allPosts).slice(0, MAX_POSTS)
     animation: maskRise 1s var(--ease-out-soft) 0.2s both;
   }
 
+  /* ---- Pixel details ---------------------------------------------------- */
+
+  /* Status line: pixel type with a blinking block caret */
+  .hero-status {
+    margin-top: -0.25rem;
+    font-family: 'Silkscreen', ui-monospace, monospace;
+    font-size: 0.8rem;
+    letter-spacing: 0.02em;
+    color: hsl(var(--muted-foreground));
+    animation: softFade 0.8s ease-out 0.4s both;
+  }
+
+  .hero-status-stack {
+    display: inline-grid;
+    justify-items: start;
+  }
+
+  .hero-status-ghost,
+  .hero-status-live {
+    grid-area: 1 / 1;
+    white-space: nowrap;
+  }
+
+  .hero-status-ghost {
+    visibility: hidden;
+    padding-right: 0.8em; /* room for the caret */
+  }
+
+  .hero-status-caret {
+    display: inline-block;
+    width: 0.55em;
+    height: 1em;
+    margin-left: 0.2em;
+    vertical-align: -0.12em;
+    background: hsl(var(--primary));
+    animation: caretBlink 1.05s steps(1, end) infinite;
+  }
+
+  .hero-status.is-typing .hero-status-caret {
+    animation: none;
+  }
+
+  @keyframes caretBlink {
+    50% {
+      opacity: 0;
+    }
+  }
+
+  /* Tiny pixel sparkle before each section title, built from 2px "pixels" */
+  #content :global(.section-title)::before {
+    content: '';
+    display: inline-block;
+    width: 2px;
+    height: 2px;
+    margin: 0 14px 0.3em 2px;
+    vertical-align: middle;
+    color: hsl(var(--primary));
+    background: currentColor;
+    box-shadow:
+      0 -2px currentColor,
+      0 -4px currentColor,
+      0 2px currentColor,
+      0 4px currentColor,
+      -2px 0 currentColor,
+      -4px 0 currentColor,
+      2px 0 currentColor,
+      4px 0 currentColor;
+    transform-origin: center;
+  }
+
+  #content :global(section:hover .section-title)::before {
+    animation: sparkle 0.9s steps(3, end) infinite;
+  }
+
+  @keyframes sparkle {
+    0% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.35;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+
+  /* Cards: small lift and a thin gold outline, no heavy shadow */
+  .scroll-reveal > :global(a) {
+    transition:
+      transform 0.3s var(--ease-out-soft),
+      border-color 0.3s ease;
+  }
+
+  .scroll-reveal > :global(a:hover) {
+    transform: translate3d(0, -2px, 0);
+    border-color: hsl(var(--primary) / 0.55);
+    box-shadow: none;
+  }
+
+  /* Skills as inventory slots: square-cornered, light up on hover */
+  #content :global(.skill-slots button) {
+    border-radius: 3px;
+    transition:
+      border-color 0.2s ease,
+      background-color 0.2s ease,
+      transform 0.2s var(--ease-out-soft);
+  }
+
+  #content :global(.skill-slots button:hover) {
+    transform: translate3d(0, -1px, 0);
+    border-color: hsl(var(--primary) / 0.6);
+    background-color: hsl(var(--primary) / 0.08);
+  }
+
   .hero-label-item {
     animation: softRise 0.9s var(--ease-out-soft) both;
   }
 
   .hero-label-item:nth-child(1) {
-    animation-delay: 0.42s;
+    animation-delay: 0.5s;
   }
 
   .hero-label-item:nth-child(2) {
-    animation-delay: 0.48s;
+    animation-delay: 0.56s;
   }
 
   .hero-label-item:nth-child(3) {
-    animation-delay: 0.54s;
+    animation-delay: 0.62s;
   }
 
   .hero-label-item:nth-child(4) {
-    animation-delay: 0.6s;
+    animation-delay: 0.68s;
   }
 
   .hero-label-item:nth-child(5) {
-    animation-delay: 0.66s;
+    animation-delay: 0.74s;
   }
 
   /* First-screen content: pure CSS, never waits for JS */
   .first-screen-reveal {
-    animation: softRise 1s var(--ease-out-soft) 0.7s both;
+    animation: softRise 1s var(--ease-out-soft) 0.78s both;
   }
 
   #content > :global(section:first-child) :global(h2) {
-    animation: softFade 1s ease-out 0.65s both;
+    animation: softFade 1s ease-out 0.72s both;
   }
 
   .scroll-reveal {
@@ -391,16 +635,6 @@ const allPostsByDate = sortMDByDate(allPosts).slice(0, MAX_POSTS)
     transition:
       opacity 0.9s var(--ease-out-soft),
       transform 0.9s var(--ease-out-soft);
-  }
-
-  @keyframes canvasFade {
-    from {
-      opacity: 0;
-    }
-
-    to {
-      opacity: 0.68;
-    }
   }
 
   @keyframes haloFade {
@@ -470,10 +704,6 @@ const allPostsByDate = sortMDByDate(allPosts).slice(0, MAX_POSTS)
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .home-ai-canvas {
-      display: none;
-    }
-
     .first-screen-reveal,
     .scroll-reveal,
     .scroll-reveal-left,
@@ -486,6 +716,8 @@ const allPostsByDate = sortMDByDate(allPosts).slice(0, MAX_POSTS)
     .hero-avatar-wrap::after,
     .hero-title,
     .hero-title-inner,
+    .hero-status,
+    .hero-status-caret,
     .hero-label-item {
       opacity: 1;
       transform: none;

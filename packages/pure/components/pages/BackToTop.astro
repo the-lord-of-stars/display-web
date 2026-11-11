@@ -1,6 +1,4 @@
 ---
-import { Icon } from '../user'
-
 const { header: headerName, content: contentName, needPercent = true } = Astro.props
 ---
 
@@ -11,16 +9,28 @@ const { header: headerName, content: contentName, needPercent = true } = Astro.p
   <slot name='other-icons' />
   <button
     aria-label='Back to Top'
-    class='relative size-10 flex items-center justify-center rounded-full border-2 border-transparent bg-muted text-muted-foreground duration-300 hover:border-border/75 sm:size-12 opacity-0'
+    class='pixel-top-btn relative size-10 flex items-center justify-center rounded-[4px] border-2 border-transparent bg-muted text-muted-foreground duration-300 hover:border-border/75 sm:size-12 opacity-0'
     id='to-top-btn'
   >
     <div
       class='top-text absolute bottom-0 end-0 start-0 top-0 flex items-center justify-center group-[.ended]:opacity-0'
     >
-      <span class='text'>10</span>
-      <span class='text-xs'>%</span>
+      <span class='text pixel-font text-xs'>10</span>
+      <span class='pixel-font text-[0.6rem]'>%</span>
     </div>
-    <Icon name='up' class='top-icon group-[.ended]:opacity-100' />
+    {/* Pixel up-arrow, drawn on a 7x7 grid */}
+    <svg
+      class='top-icon size-5 group-[.ended]:opacity-100'
+      viewBox='0 0 7 7'
+      fill='currentColor'
+      shape-rendering='crispEdges'
+      aria-hidden='true'
+    >
+      <rect x='3' y='0' width='1' height='7'></rect>
+      <rect x='2' y='1' width='3' height='1'></rect>
+      <rect x='1' y='2' width='5' height='1'></rect>
+      <rect x='0' y='3' width='7' height='1'></rect>
+    </svg>
   </button>
 </div>
 
@@ -73,6 +83,17 @@ const { header: headerName, content: contentName, needPercent = true } = Astro.p
 </script>
 
 <style>
+  .pixel-top-btn:hover {
+    color: hsl(var(--primary));
+    border-color: hsl(var(--primary) / 0.6);
+    box-shadow: 3px 3px 0 0 hsl(var(--primary) / 0.4);
+  }
+
+  .pixel-top-btn:active {
+    transform: translate(2px, 2px);
+    box-shadow: none;
+  }
+
   #action-buttons {
     transform: translateY(4rem);
     &.show {
