@@ -58,25 +58,33 @@ const { header: headerName, content: contentName, needPercent = true } = Astro.p
     console.error(`Element with ID ${headerName} not found.`)
   }
   if (needPercent) {
-    // scroll percentage
-    const scrollHeight = articleElement.scrollHeight // total height
-    const articleTop = articleElement.offsetTop // article top
-    const clientHeight = document.documentElement.clientHeight // client height
-
-    function calculateScrollPercent() {
-      const scrollTop = document.documentElement.scrollTop || document.body.scrollTop
-      if (scrollTop < articleTop) return
-      return Math.round(((scrollTop - articleTop) / (scrollHeight - clientHeight)) * 100)
+    // Reading progress through the article, 0-100.
+    // Measured on every scroll (images can change the height after load), clamped so it
+    // can never go negative, and falls back to whole-page progress for short articles.
+    function readProgress() {
+      const viewport = window.innerHeight
+      const scrollY = window.scrollY
+      const rect = articleElement ? articleElement.getBoundingClientRect() : null
+      if (rect && rect.height > viewport * 0.5) {
+        const start = rect.top + scrollY
+        const range = rect.height - viewport
+        if (range > 0) return (scrollY - start) / range
+      }
+      const pageRange = document.documentElement.scrollHeight - viewport
+      return pageRange > 0 ? scrollY / pageRange : 1
     }
 
-    document.addEventListener('scroll', () => {
-      const scrollPercent = calculateScrollPercent()
-      if (scrollPercent === undefined) return
-      scrollPercentEl.innerText = scrollPercent.toString()
-
-      // If percent is 100, percent won't need to show
-      actionBtns.classList.toggle('ended', scrollPercent > 100)
-    })
+    document.addEventListener(
+      'scroll',
+      () => {
+        const raw = readProgress()
+        const percent = Math.min(100, Math.max(0, Math.round(raw * 100)))
+        scrollPercentEl.innerText = percent.toString()
+        // Past the end of the article: show the arrow instead of a number
+        actionBtns.classList.toggle('ended', raw > 1)
+      },
+      { passive: true }
+    )
   } else {
     actionBtns.classList.add('ended')
   }

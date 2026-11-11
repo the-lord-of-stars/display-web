@@ -7,10 +7,19 @@
   const update = () => {
     ticking = false
     const article = document.getElementById('content')
-    if (!article || !fill) return
-    const start = article.offsetTop
-    const end = start + article.offsetHeight - window.innerHeight
-    const raw = (window.scrollY - start) / Math.max(1, end - start)
+    if (!fill) return
+    // Same rule as the back-to-top percentage: progress through the article,
+    // or through the whole page when the article is shorter than half a screen
+    const viewport = window.innerHeight
+    let raw = 1
+    const rect = article ? article.getBoundingClientRect() : null
+    const range = rect ? rect.height - viewport : 0
+    if (rect && rect.height > viewport * 0.5 && range > 0) {
+      raw = (window.scrollY - (rect.top + window.scrollY)) / range
+    } else {
+      const pageRange = document.documentElement.scrollHeight - viewport
+      raw = pageRange > 0 ? window.scrollY / pageRange : 1
+    }
     const p = Math.min(1, Math.max(0, raw))
     // Fill whole segments only, like an 8-bit gauge
     const filled = Math.ceil(p * SEGMENTS) / SEGMENTS
