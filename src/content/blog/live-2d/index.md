@@ -10,9 +10,12 @@ heroImage: { src: './thumbnail.jpg', color: '#4891B2' }
 language: 'English'
 ---
 
-<script src="https://unpkg.com/oh-my-live2d@latest"></script>
 <script>
-  OML2D.loadOml2d({
+  // Load the Live2D library without blocking the page, and reuse it if the
+  // site-wide loader has already fetched it.
+  (() => {
+    const SRC = 'https://unpkg.com/oh-my-live2d@0.19.3/dist/index.min.js';
+    const run = () => OML2D.loadOml2d({
    mobileDisplay: true,
    models: [{
         path: 'https://raw.githubusercontent.com/the-lord-of-stars/warehouse/main/model/duck_model/duck.model3.json',
@@ -69,4 +72,13 @@ language: 'English'
                }]
         },
   });
+    if (window.OML2D) return run();
+    const existing = document.querySelector(`script[src="${SRC}"]`);
+    if (existing) return existing.addEventListener('load', run, { once: true });
+    const s = document.createElement('script');
+    s.src = SRC;
+    s.async = true;
+    s.onload = run;
+    document.head.appendChild(s);
+  })();
 </script>

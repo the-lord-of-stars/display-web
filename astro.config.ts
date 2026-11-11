@@ -25,7 +25,7 @@ import config from './src/site.config.ts'
 // https://astro.build/config
 export default defineConfig({
   // Top-Level Options
-  site: 'https://the-lord-of-stars.github.io',
+  site: 'https://www.zefei.site',
   // base: '/display-web',
   trailingSlash: 'never',
 

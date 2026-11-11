@@ -38,6 +38,12 @@ const lamps = {
 }
 const toRects = (rows: string[]) =>
   rows.flatMap((row, y) => [...row].flatMap((ch, x) => (ch === '.' ? [] : [{ x, y, kind: ch }])))
+// Current section, for the pixel menu cursor in the nav
+const path = Astro.url.pathname.replace(/\/$/, '') || '/'
+const isCurrent = (link: string) => {
+  const target = link.replace(/\/$/, '') || '/'
+  return target === '/' ? path === '/' : path === target || path.startsWith(target + '/')
+}
 const lampClass: Record<string, string> = {
   '#': 'lamp-body',
   '*': 'lamp-bulb',
@@ -67,7 +73,11 @@ const lampClass: Record<string, string> = {
           config.header.menu.map((item) => (
             <a
               href={item.link}
-              class='w-full flex-none grow py-2 text-right font-medium transition-none hover:text-primary sm:w-fit sm:px-3'
+              class:list={[
+                'w-full flex-none grow py-2 text-right font-medium transition-none hover:text-primary sm:w-fit sm:px-3',
+                isCurrent(item.link) && 'nav-current'
+              ]}
+              aria-current={isCurrent(item.link) ? 'page' : undefined}
               aria-label='Nav menu item'
             >
               {item.title}
@@ -77,7 +87,7 @@ const lampClass: Record<string, string> = {
         <div class='flex w-full grow flex-row justify-end gap-x-3 sm:w-fit sm:gap-x-5'>
           <a class='px-1 py-2 transition-none sm:px-2' href='/search' title='Search'>
             <span class='sr-only'>Search</span>
-            <Icon name='search' class='size-5' />
+            <Icon name='search' class='size-5' pixel />
           </a>
         </div>
       </div>
@@ -89,7 +99,7 @@ const lampClass: Record<string, string> = {
         id='toggleDarkMode'
         class='group/dark box-content size-5 rounded-md border p-1.5 transition-colors hover:bg-border sm:group-[.not-top]:rounded-xl'
       >
-        <span class='sr-only'>Dark Theme</span>
+        <span class='sr-only' id='themeToggleLabel'>Theme: system. Switch theme</span>
         {
           (['system', 'light', 'dark'] as const).map((mode) => (
             <svg
@@ -110,7 +120,7 @@ const lampClass: Record<string, string> = {
         class='rounded-md border p-1.5 transition-colors hover:bg-border sm:hidden sm:group-[.not-top]:rounded-xl'
       >
         <span class='sr-only'>Menu</span>
-        <Icon class='size-5' name='menu' />
+        <Icon class='size-5' name='menu' pixel />
       </button>
     </div>
   </div>
@@ -120,7 +130,10 @@ const lampClass: Record<string, string> = {
 <script is:inline>
   const toggleDarkModeElement = document.getElementById('toggleDarkMode')
   if (toggleDarkModeElement) {
-    toggleDarkModeElement.dataset.theme = localStorage.getItem('theme') || 'system'
+    const theme = localStorage.getItem('theme') || 'system'
+    toggleDarkModeElement.dataset.theme = theme
+    const label = document.getElementById('themeToggleLabel')
+    if (label) label.textContent = `Theme: ${theme}. Switch theme`
   }
 </script>
 <script>
@@ -151,6 +164,8 @@ const lampClass: Record<string, string> = {
         // document.dispatchEvent(toggleDarkModeEvent)
         const newTheme = setTheme(undefined, true)
         darkModeBtn.dataset.theme = newTheme
+        const label = this.querySelector('#themeToggleLabel')
+        if (label) label.textContent = `Theme: ${newTheme}. Switch theme`
         showToast({ message: `Set theme to ${newTheme}` })
       })
 

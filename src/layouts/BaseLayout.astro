@@ -7,6 +7,8 @@ import config from '@/site-config'
 import '@/assets/styles/app.css'
 // Pixel font for small accents (status line, 404, progress bar, 8-bit mode)
 import '@fontsource/silkscreen/latin-400.css'
+// Pixel font for titles and subheadings (body text stays Satoshi)
+import '@fontsource/jersey-10/latin-400.css'
 
 interface Props {
   meta: SiteMeta
@@ -138,7 +140,11 @@ const {
                 marginBottom: '80px'
               },
               restMessage: 'Resting',
-              loadSuccessMessage: 'Ready'
+              loadSuccessMessage: 'Ready',
+              loadingMessage: 'Loading',
+              loadFailMessage: 'Failed to load',
+              switchingMessage: 'Switching',
+              reloadMessage: 'Reload'
             },
             tips: {
               style: {
@@ -146,6 +152,37 @@ const {
                 height: 120,
                 left: 'calc(50% - 20px)',
                 top: '-100px'
+              },
+              // English lines (the library defaults are Chinese)
+              welcomeTips: {
+                message: {
+                  daybreak: "Up before the sun? The lamp's already on. Let's make today count.",
+                  morning: 'Good morning! Coffee first, then research.',
+                  noon: "It's noon. Step away from the keyboard and eat something!",
+                  afternoon: 'Afternoon slump? I recommend another coffee.',
+                  dusk: 'The sun is setting. Long day? You did great.',
+                  night: 'Good evening! Thanks for stopping by.',
+                  lateNight: "It's getting late... don't forget to rest, okay?",
+                  weeHours: 'Still up at this hour? Same as Zefei, I guess. Get some sleep!'
+                }
+              },
+              idleTips: {
+                interval: 18000,
+                message: [
+                  "I'm Tia. I keep this desk tidy while Zefei writes code.",
+                  'Curious about Human-AI interaction? Take a look at the Publications page.',
+                  'Psst, try clicking the avatar at the top of the home page.',
+                  'The dust in the lamplight dodges your cursor. Give it a try!',
+                  'Reading a long post? Watch the EXP bar fill up at the top.',
+                  'Remember to drink some water.',
+                  'There is a whole blog post about making Live2D models like me.'
+                ]
+              },
+              copyTips: {
+                message: [
+                  'Copied something? Please credit the source~',
+                  'Good pick! Remember to cite it.'
+                ]
               }
             },
             menus: {
@@ -159,7 +196,7 @@ const {
                 {
                   id: 'Rest',
                   icon: 'icon-rest',
-                  title: 'rest',
+                  title: 'Rest',
                   onClick: (oml2d) => {
                     oml2d.stageSlideOut()
                     oml2d.setStatusBarClickEvent(() => {
@@ -176,6 +213,10 @@ const {
         const inject = () => {
           // Skip on small screens: the model is hidden there anyway (mobileDisplay: false).
           if (window.matchMedia('(max-width: 768px)').matches) return
+          // Reuse the library if a page (e.g. the Live2D blog post) already loaded it
+          if (window.OML2D) return init()
+          const existing = document.querySelector(`script[src="${LIVE2D_SRC}"]`)
+          if (existing) return existing.addEventListener('load', init, { once: true })
           const s = document.createElement('script')
           s.src = LIVE2D_SRC
           s.async = true

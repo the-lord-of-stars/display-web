@@ -78,6 +78,47 @@
   box-shadow: 0 0 0 0 hsl(var(--primary) / 0.45);
 }
 
+/* Titles and subheadings in a pixel typeface (Jersey 10); body text stays Satoshi.
+   Reading-heavy headings (card titles, paper titles) keep the body font.
+   Jersey 10 has a single weight, so no synthetic bold (it blurs the pixels), and
+   font-size-adjust matches its x-height to Satoshi so headings keep their visual size. */
+:root {
+  --font-heading: 'Jersey 10', 'Satoshi', sans-serif;
+}
+h1,
+h2,
+h3,
+header-component > a[aria-label='Brand'] {
+  font-family: var(--font-heading);
+  font-weight: 400 !important;
+  font-synthesis: none;
+  font-size-adjust: 0.5;
+  letter-spacing: 0.03em;
+}
+.pixel-frame :is(h1, h2, h3),
+.post-preview :is(h1, h2, h3),
+.publication-title {
+  font-family: 'Satoshi', sans-serif;
+  font-weight: 500 !important;
+  font-synthesis: initial;
+  font-size-adjust: none;
+  letter-spacing: normal;
+}
+
+/* Short UI labels in the same pixel type: nav, buttons, tags, dates, footer.
+   Longer reading text (paragraphs, TOC entries, card text) stays Satoshi. */
+#headerExpandContent a,
+.pixel-btn,
+.interest-tags li,
+.skill-slots button,
+time,
+footer {
+  font-family: var(--font-heading);
+  font-synthesis: none;
+  font-size-adjust: 0.5;
+  letter-spacing: 0.03em;
+}
+
 /* Pixel font utility */
 .pixel-font {
   font-family: 'Silkscreen', ui-monospace, monospace;
@@ -230,6 +271,324 @@ html.px-entering body::before {
   to {
     opacity: 0;
     visibility: hidden;
+  }
+}
+
+/* RPG dialog box: double pixel border, hard shadow, blinking ▼ in the corner.
+   Used for toasts and the Live2D speech bubble. */
+.rpg-dialog {
+  position: relative;
+  padding: 0.6rem 1.6rem 0.6rem 0.9rem;
+  border: 2px solid hsl(var(--foreground) / 0.85);
+  border-radius: 0;
+  background-color: hsl(var(--background));
+  color: hsl(var(--foreground));
+  box-shadow:
+    inset 0 0 0 2px hsl(var(--background)),
+    inset 0 0 0 4px hsl(var(--primary) / 0.55),
+    4px 4px 0 0 hsl(var(--foreground) / 0.18);
+  font-size: 0.875rem;
+}
+.rpg-dialog::after {
+  content: '';
+  position: absolute;
+  right: 9px;
+  bottom: 8px;
+  width: 2px;
+  height: 2px;
+  color: hsl(var(--primary));
+  /* ▼ drawn from 2px pixels */
+  box-shadow:
+    -4px -4px 0 currentColor,
+    -2px -4px 0 currentColor,
+    0 -4px 0 currentColor,
+    2px -4px 0 currentColor,
+    4px -4px 0 currentColor,
+    -2px -2px 0 currentColor,
+    0 -2px 0 currentColor,
+    2px -2px 0 currentColor,
+    0 0 0 currentColor;
+  animation: rpg-caret 0.9s steps(2, end) infinite;
+}
+@keyframes rpg-caret {
+  50% {
+    transform: translateY(2px);
+  }
+}
+.rpg-toast {
+  font-family: 'Silkscreen', ui-monospace, monospace;
+  font-size: 0.75rem;
+  letter-spacing: 0.02em;
+  min-height: 2.6rem;
+}
+
+/* Live2D speech bubble: same dialog look, original size and position kept */
+#oml2d-tips {
+  border: 2px solid hsl(var(--foreground) / 0.85) !important;
+  border-radius: 0 !important;
+  background: hsl(var(--background)) !important;
+  color: hsl(var(--foreground)) !important;
+  box-shadow:
+    inset 0 0 0 2px hsl(var(--background)),
+    inset 0 0 0 4px hsl(var(--primary) / 0.55),
+    4px 4px 0 0 hsl(var(--foreground) / 0.18) !important;
+}
+#oml2d-tips::after {
+  content: '';
+  position: absolute;
+  right: 11px;
+  bottom: 10px;
+  width: 2px;
+  height: 2px;
+  color: hsl(var(--primary));
+  box-shadow:
+    -4px -4px 0 currentColor,
+    -2px -4px 0 currentColor,
+    0 -4px 0 currentColor,
+    2px -4px 0 currentColor,
+    4px -4px 0 currentColor,
+    -2px -2px 0 currentColor,
+    0 -2px 0 currentColor,
+    2px -2px 0 currentColor,
+    0 0 0 currentColor;
+  animation: rpg-caret 0.9s steps(2, end) infinite;
+}
+
+/* Game-menu cursor ▶ next to the current TOC entry and the current nav page */
+.toc-item,
+.nav-current {
+  position: relative;
+}
+.toc-item.highlight::before,
+.nav-current::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  width: 2px;
+  height: 2px;
+  margin-top: -5px;
+  color: hsl(var(--primary));
+  background: currentColor;
+  /* ▶ from 2px pixels */
+  box-shadow:
+    0 2px 0 currentColor,
+    0 4px 0 currentColor,
+    0 6px 0 currentColor,
+    0 8px 0 currentColor,
+    2px 2px 0 currentColor,
+    2px 4px 0 currentColor,
+    2px 6px 0 currentColor,
+    4px 4px 0 currentColor;
+  animation: menu-cursor 0.8s steps(2, end) infinite;
+}
+.toc-item.highlight::before {
+  left: 2px;
+}
+/* Several sections can be highlighted at once; a menu has one cursor, so keep the first */
+toc-heading li:has(.toc-item.highlight) ~ li .toc-item.highlight::before,
+toc-heading li:has(.toc-item.highlight) li .toc-item.highlight::before {
+  display: none;
+}
+.nav-current::before {
+  left: 0;
+}
+@media (max-width: 639px) {
+  .nav-current::before {
+    display: none;
+  }
+}
+@keyframes menu-cursor {
+  50% {
+    transform: translateX(2px);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .toc-item.highlight::before,
+  .nav-current::before,
+  .rpg-dialog::after,
+  #oml2d-tips::after {
+    animation: none;
+  }
+}
+
+/* Stepped "pixel" corners for cards.
+   The element's background is the frame colour and ::before (inset 1px) is the fill;
+   both are clipped to the same stepped outline so the 1px border follows the steps. */
+:root {
+  --px-notch: polygon(
+    0 4px,
+    2px 4px,
+    2px 2px,
+    4px 2px,
+    4px 0,
+    calc(100% - 4px) 0,
+    calc(100% - 4px) 2px,
+    calc(100% - 2px) 2px,
+    calc(100% - 2px) 4px,
+    100% 4px,
+    100% calc(100% - 4px),
+    calc(100% - 2px) calc(100% - 4px),
+    calc(100% - 2px) calc(100% - 2px),
+    calc(100% - 4px) calc(100% - 2px),
+    calc(100% - 4px) 100%,
+    4px 100%,
+    4px calc(100% - 2px),
+    2px calc(100% - 2px),
+    2px calc(100% - 4px),
+    0 calc(100% - 4px)
+  );
+}
+.pixel-frame {
+  --frame-color: hsl(var(--border));
+  --frame-fill: hsl(var(--muted));
+  position: relative;
+  isolation: isolate;
+  border-color: transparent !important;
+  border-radius: 0 !important;
+  background: var(--frame-color) !important;
+  clip-path: var(--px-notch);
+  box-shadow: none !important;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.pixel-frame::before {
+  content: '';
+  position: absolute;
+  /* The element keeps its 1px (transparent) border, so the padding box is already
+     1px inside the frame */
+  inset: 0;
+  z-index: -1;
+  background: var(--frame-fill);
+  clip-path: var(--px-notch);
+  transition: background-color 0.2s ease;
+}
+.pixel-frame-bg {
+  --frame-fill: hsl(var(--background));
+}
+a.pixel-frame:hover,
+.pixel-frame:has(> a:hover),
+.post-preview.pixel-frame:hover {
+  --frame-color: hsl(var(--primary) / 0.55);
+}
+.post-preview.pixel-frame:hover {
+  --frame-fill: hsl(var(--muted));
+}
+.pixel-frame :is(img, .cover-image) {
+  border-radius: 0 !important;
+}
+
+/* Article links: dotted pixel underline; on hover a solid line fills in, step by step */
+.prose a:not(.not-prose a):not(.pixel-btn):not(:has(img)) {
+  text-decoration: none;
+  padding-bottom: 2px;
+  background-image:
+    linear-gradient(currentColor, currentColor),
+    repeating-linear-gradient(90deg, currentColor 0 2px, transparent 2px 4px);
+  background-size:
+    0% 2px,
+    100% 2px;
+  background-position:
+    left bottom,
+    left bottom;
+  background-repeat: no-repeat;
+  transition:
+    background-size 0.3s steps(6, end),
+    color 0.2s ease;
+}
+.prose a:not(.not-prose a):not(.pixel-btn):not(:has(img)):hover {
+  color: hsl(var(--primary));
+  background-size:
+    100% 2px,
+    100% 2px;
+}
+
+/* Code blocks: a pixel window title bar with three square "buttons" */
+.astro-code:has(code) {
+  padding-top: 2rem;
+  border-radius: 0 !important;
+  clip-path: var(--px-notch);
+}
+.astro-code:has(code)::before {
+  content: '';
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 2rem;
+  background-color: hsl(var(--foreground) / 0.04);
+  background-image: repeating-linear-gradient(
+    90deg,
+    hsl(var(--border)) 0 4px,
+    transparent 4px 8px
+  );
+  background-size: 100% 2px;
+  background-position: left bottom;
+  background-repeat: no-repeat;
+  pointer-events: none;
+}
+.astro-code:has(code)::after {
+  content: '';
+  position: absolute;
+  top: calc(1rem - 3px);
+  left: 0.9rem;
+  width: 6px;
+  height: 6px;
+  background: #e07a6a;
+  box-shadow:
+    10px 0 0 #e0ad4f,
+    20px 0 0 #8fb573;
+  pointer-events: none;
+}
+.astro-code:has(code) pre code::before {
+  top: calc(2rem + 0.8571429em) !important;
+}
+.astro-code:has(div.title) {
+  padding-top: 2rem;
+}
+.astro-code .title {
+  margin: 0.45rem 0 0 3.75rem !important;
+  font-size: 0.75rem;
+}
+.astro-code .language,
+.astro-code button.copy {
+  top: 0.3rem !important;
+}
+.astro-code .language {
+  right: 0.75rem !important;
+  font-family: 'Silkscreen', ui-monospace, monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.04em;
+  line-height: 1.4rem;
+}
+
+/* Pixel mouse cursor (mouse/trackpad only), about the size of a system cursor.
+   !important because UnoCSS's reset and some libraries (Live2D menus) set cursor: pointer. */
+@media (pointer: fine) {
+  html,
+  .cursor-default {
+    cursor: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='11'%20height='17'%20viewBox='0%200%2011%2017'%20shape-rendering='crispEdges'%3E%3Crect%20x='0'%20y='0'%20width='1'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='0'%20y='1'%20width='2'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='0'%20y='2'%20width='1'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='1'%20y='2'%20width='1'%20height='1'%20fill='%23fbf9f4'/%3E%3Crect%20x='2'%20y='2'%20width='1'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='0'%20y='3'%20width='1'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='1'%20y='3'%20width='2'%20height='1'%20fill='%23fbf9f4'/%3E%3Crect%20x='3'%20y='3'%20width='1'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='0'%20y='4'%20width='1'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='1'%20y='4'%20width='3'%20height='1'%20fill='%23fbf9f4'/%3E%3Crect%20x='4'%20y='4'%20width='1'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='0'%20y='5'%20width='1'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='1'%20y='5'%20width='4'%20height='1'%20fill='%23fbf9f4'/%3E%3Crect%20x='5'%20y='5'%20width='1'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='0'%20y='6'%20width='1'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='1'%20y='6'%20width='5'%20height='1'%20fill='%23fbf9f4'/%3E%3Crect%20x='6'%20y='6'%20width='1'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='0'%20y='7'%20width='1'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='1'%20y='7'%20width='6'%20height='1'%20fill='%23fbf9f4'/%3E%3Crect%20x='7'%20y='7'%20width='1'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='0'%20y='8'%20width='1'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='1'%20y='8'%20width='7'%20height='1'%20fill='%23fbf9f4'/%3E%3Crect%20x='8'%20y='8'%20width='1'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='0'%20y='9'%20width='1'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='1'%20y='9'%20width='8'%20height='1'%20fill='%23fbf9f4'/%3E%3Crect%20x='9'%20y='9'%20width='1'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='0'%20y='10'%20width='1'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='1'%20y='10'%20width='5'%20height='1'%20fill='%23fbf9f4'/%3E%3Crect%20x='6'%20y='10'%20width='5'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='0'%20y='11'%20width='1'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='1'%20y='11'%20width='2'%20height='1'%20fill='%23fbf9f4'/%3E%3Crect%20x='3'%20y='11'%20width='1'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='4'%20y='11'%20width='2'%20height='1'%20fill='%23fbf9f4'/%3E%3Crect%20x='6'%20y='11'%20width='1'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='0'%20y='12'%20width='1'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='1'%20y='12'%20width='1'%20height='1'%20fill='%23fbf9f4'/%3E%3Crect%20x='2'%20y='12'%20width='1'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='4'%20y='12'%20width='1'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='5'%20y='12'%20width='2'%20height='1'%20fill='%23fbf9f4'/%3E%3Crect%20x='7'%20y='12'%20width='1'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='0'%20y='13'%20width='2'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='4'%20y='13'%20width='1'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='5'%20y='13'%20width='2'%20height='1'%20fill='%23fbf9f4'/%3E%3Crect%20x='7'%20y='13'%20width='1'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='0'%20y='14'%20width='1'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='5'%20y='14'%20width='1'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='6'%20y='14'%20width='2'%20height='1'%20fill='%23fbf9f4'/%3E%3Crect%20x='8'%20y='14'%20width='1'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='5'%20y='15'%20width='1'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='6'%20y='15'%20width='2'%20height='1'%20fill='%23fbf9f4'/%3E%3Crect%20x='8'%20y='15'%20width='1'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='6'%20y='16'%20width='2'%20height='1'%20fill='%232b201b'/%3E%3C/svg%3E") 0 0, auto !important;
+  }
+  a[href],
+  button:not(:disabled, .cursor-default),
+  summary,
+  label[for],
+  select,
+  [role='button'],
+  .cursor-pointer,
+  #oml2d-menus *,
+  #oml2d-statusBar,
+  #oml2d-statusBar * {
+    cursor: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='14'%20height='16'%20viewBox='0%200%2014%2016'%20shape-rendering='crispEdges'%3E%3Crect%20x='4'%20y='0'%20width='2'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='3'%20y='1'%20width='1'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='4'%20y='1'%20width='2'%20height='1'%20fill='%23fbf9f4'/%3E%3Crect%20x='6'%20y='1'%20width='1'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='3'%20y='2'%20width='1'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='4'%20y='2'%20width='2'%20height='1'%20fill='%23fbf9f4'/%3E%3Crect%20x='6'%20y='2'%20width='1'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='3'%20y='3'%20width='1'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='4'%20y='3'%20width='2'%20height='1'%20fill='%23fbf9f4'/%3E%3Crect%20x='6'%20y='3'%20width='1'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='3'%20y='4'%20width='1'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='4'%20y='4'%20width='2'%20height='1'%20fill='%23fbf9f4'/%3E%3Crect%20x='6'%20y='4'%20width='5'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='3'%20y='5'%20width='1'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='4'%20y='5'%20width='2'%20height='1'%20fill='%23fbf9f4'/%3E%3Crect%20x='6'%20y='5'%20width='1'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='7'%20y='5'%20width='2'%20height='1'%20fill='%23fbf9f4'/%3E%3Crect%20x='9'%20y='5'%20width='1'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='10'%20y='5'%20width='1'%20height='1'%20fill='%23fbf9f4'/%3E%3Crect%20x='11'%20y='5'%20width='2'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='0'%20y='6'%20width='2'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='3'%20y='6'%20width='1'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='4'%20y='6'%20width='2'%20height='1'%20fill='%23fbf9f4'/%3E%3Crect%20x='6'%20y='6'%20width='1'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='7'%20y='6'%20width='2'%20height='1'%20fill='%23fbf9f4'/%3E%3Crect%20x='9'%20y='6'%20width='1'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='10'%20y='6'%20width='1'%20height='1'%20fill='%23fbf9f4'/%3E%3Crect%20x='11'%20y='6'%20width='1'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='12'%20y='6'%20width='1'%20height='1'%20fill='%23fbf9f4'/%3E%3Crect%20x='13'%20y='6'%20width='1'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='0'%20y='7'%20width='1'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='1'%20y='7'%20width='1'%20height='1'%20fill='%23fbf9f4'/%3E%3Crect%20x='2'%20y='7'%20width='2'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='4'%20y='7'%20width='9'%20height='1'%20fill='%23fbf9f4'/%3E%3Crect%20x='13'%20y='7'%20width='1'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='0'%20y='8'%20width='1'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='1'%20y='8'%20width='2'%20height='1'%20fill='%23fbf9f4'/%3E%3Crect%20x='3'%20y='8'%20width='1'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='4'%20y='8'%20width='9'%20height='1'%20fill='%23fbf9f4'/%3E%3Crect%20x='13'%20y='8'%20width='1'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='1'%20y='9'%20width='1'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='2'%20y='9'%20width='11'%20height='1'%20fill='%23fbf9f4'/%3E%3Crect%20x='13'%20y='9'%20width='1'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='2'%20y='10'%20width='1'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='3'%20y='10'%20width='10'%20height='1'%20fill='%23fbf9f4'/%3E%3Crect%20x='13'%20y='10'%20width='1'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='2'%20y='11'%20width='1'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='3'%20y='11'%20width='9'%20height='1'%20fill='%23fbf9f4'/%3E%3Crect%20x='12'%20y='11'%20width='1'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='3'%20y='12'%20width='1'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='4'%20y='12'%20width='8'%20height='1'%20fill='%23fbf9f4'/%3E%3Crect%20x='12'%20y='12'%20width='1'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='4'%20y='13'%20width='1'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='5'%20y='13'%20width='6'%20height='1'%20fill='%23fbf9f4'/%3E%3Crect%20x='11'%20y='13'%20width='1'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='4'%20y='14'%20width='1'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='5'%20y='14'%20width='6'%20height='1'%20fill='%23fbf9f4'/%3E%3Crect%20x='11'%20y='14'%20width='1'%20height='1'%20fill='%232b201b'/%3E%3Crect%20x='4'%20y='15'%20width='8'%20height='1'%20fill='%232b201b'/%3E%3C/svg%3E") 4 0, pointer !important;
+  }
+  input:not([type='button'], [type='submit'], [type='checkbox'], [type='radio']),
+  textarea,
+  [contenteditable='true'] {
+    cursor: text !important;
+  }
+}
+
+/* Keep the back-to-top / reading-progress button clear of the Live2D model,
+   which sits in the bottom-right corner (250px tall stage) on desktop */
+@media (min-width: 769px) {
+  body:has(#oml2d-stage) #action-buttons {
+    bottom: calc(250px + 1.5rem);
   }
 }
 

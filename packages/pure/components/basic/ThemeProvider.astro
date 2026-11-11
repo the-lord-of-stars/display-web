@@ -25,14 +25,28 @@
 
   // Listen for theme change event
   listenThemeChange()
-  // Listen for toast event
+  // Listen for toast event: shown as a small RPG-style dialog box whose text types out
   document.addEventListener('toast', (e) => {
     const { message } = (e as CustomEvent).detail
+    document.querySelectorAll('.rpg-toast').forEach((el) => el.remove())
     const toast = document.createElement('div')
-    toast.className =
-      'animate fixed bottom-8 z-20 px-4 py-2 bg-muted text-foreground rounded-lg border shadow-lg flex items-center gap-2'
-    toast.innerHTML = `<svg width='22' height='22' viewBox='0 0 24 24' fill='currentColor'>${Icons.info}</svg> <span>${message}</span>`
+    toast.className = 'rpg-toast rpg-dialog animate fixed bottom-8 z-20 flex items-center gap-2'
+    toast.setAttribute('role', 'status')
+    toast.innerHTML = `<svg width='16' height='16' viewBox='0 0 24 24' fill='currentColor' aria-hidden='true'>${Icons.info}</svg> <span class='rpg-toast-text'></span>`
+    const textEl = toast.querySelector('.rpg-toast-text') as HTMLElement
     document.body.appendChild(toast)
+
+    const text = String(message)
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    if (reduce) {
+      textEl.textContent = text
+    } else {
+      let i = 0
+      const timer = setInterval(() => {
+        textEl.textContent = text.slice(0, ++i)
+        if (i >= text.length) clearInterval(timer)
+      }, 24)
+    }
     setTimeout(() => {
       toast.remove()
     }, 3000)

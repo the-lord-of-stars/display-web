@@ -85,7 +85,7 @@ const footerLink1 = footerConf.links?.filter(({ pos }) => pos === 1) || []
                 href={url}
                 aria-label={label}
               >
-                <Icon name={platform as keyof typeof footerConf.social} />
+                <Icon name={platform as keyof typeof footerConf.social} pixel />
               </a>
             ))
         }

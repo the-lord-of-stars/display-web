@@ -1,5 +1,6 @@
 ---
 import { Icons } from '../../libs/icons'
+import { PixelIcons, pixelRects } from '../../libs/pixel-icons'
 
 interface Props {
   name: keyof typeof Icons
@@ -7,22 +8,44 @@ interface Props {
   color?: string
   size?: string
   class?: string
+  /** Use the pixel-art version of this icon when one exists */
+  pixel?: boolean
 }
 
-const { name, label, size = '1em', color, class: className, ...props } = Astro.props
+const { name, label, size = '1em', color, class: className, pixel, ...props } = Astro.props
+const pixelIcon = pixel ? PixelIcons[name] : undefined
 const a11yAttrs = label ? ({ 'aria-label': label } as const) : ({ 'aria-hidden': 'true' } as const)
 ---
 
-<svg
-  {...a11yAttrs}
-  class={className}
-  width='22'
-  height='22'
-  viewBox='0 0 24 24'
-  fill='currentColor'
-  set:html={Icons[name]}
-  {...props}
-/>
+{
+  pixelIcon ? (
+    <svg
+      {...a11yAttrs}
+      class:list={[className, 'pixel-icon']}
+      width='22'
+      height='22'
+      viewBox='-1 -1 14 14'
+      fill='currentColor'
+      shape-rendering='crispEdges'
+      {...props}
+    >
+      {pixelRects(pixelIcon).map((r) => (
+        <rect x={r.x} y={r.y} width={r.w} height='1' />
+      ))}
+    </svg>
+  ) : (
+    <svg
+      {...a11yAttrs}
+      class={className}
+      width='22'
+      height='22'
+      viewBox='0 0 24 24'
+      fill='currentColor'
+      set:html={Icons[name]}
+      {...props}
+    />
+  )
+}
 
 <style define:vars={{ 'sl-icon-color': color, 'sl-icon-size': size }}>
   svg {

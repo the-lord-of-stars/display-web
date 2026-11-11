@@ -27,7 +27,7 @@ const headings = publications.flatMap((group) => [
               group.items.map((pub) => (
                 <article class='publication-item'>
                   <div class='publication-top'>
-                    <div class='publication-image'>
+                    <div class='publication-image pixel-frame pixel-frame-bg'>
                       {pub.image ? (
                         <img src={pub.image} alt={pub.title} />
                       ) : (
@@ -216,7 +216,7 @@ const headings = publications.flatMap((group) => [
     display: block;
     width: 100%;
     aspect-ratio: 4 / 3;
-    border-radius: 1rem;
+    border-radius: 0;
     background: hsl(var(--muted));
   }
 
